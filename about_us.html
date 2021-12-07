@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>About Our Project</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/vis-4.16.1/vis.min.css" rel="stylesheet" />
+<script src="site_libs/vis-4.16.1/vis.min.js"></script>
+<link href="site_libs/timeline-0.4/timevis.css" rel="stylesheet" />
+<script src="site_libs/timevis-binding-1.0.0/timevis.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about_us.html">About Our Project</a>
+</li>
+<li>
+  <a href="Report.html">Final Project Report</a>
+</li>
+<li>
+  <a href="final_project_proposal.html">Project Proposal</a>
+</li>
+<li>
+  <a href="final_project.html">Descriptive Statistics</a>
+</li>
+<li>
+  <a href="travel_patterns.html">Travel Patterns</a>
+</li>
+<li>
+  <a href="shiny_dashboard.html">Subway Shiny App</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">About Our Project</h1>
+
+</div>
+
+
+<div id="screencast" class="section level2">
+<h2>Screencast</h2>
+<p><em>Insert Screencast here</em></p>
+</div>
+<div id="group-members" class="section level2">
+<h2>Group members</h2>
+<ul>
+<li>Jess Rosenberg (jdr2191)</li>
+<li>Zoe Verzani (zv2138)</li>
+<li>Matthew Russell (mtr2143)</li>
+<li>Rose Killian (rk3110)</li>
+<li>Christie Zettler (cz2657)</li>
+</ul>
+</div>
+<div id="the-motivation-for-this-project" class="section level2">
+<h2>The motivation for this project</h2>
+<p>During the height of the pandemic, Citi Bikes played an integral part in helping to transport critical workers around NYC. Many people in NYC also likely switched from riding the subway regularly to seeking alternative transportation methods. We are interested in understanding how transportation trends across NYC changed during the pandemic and since vaccinations became widely available in early 2021.</p>
+</div>
+<div id="timeline-of-covid-events" class="section level2">
+<h2>Timeline of COVID Events</h2>
+<p>Our understanding of COVID-19 changed daily, if not hourly, at the beginning of the pandemic. The below timeline is helpful to remind ourselves of major events of 2020.</p>
+<pre class="r"><code>timeline &lt;- data.frame(
+  id      = 1:11,
+  content = c(&quot;First COVID Case in NYC&quot;, 
+              &quot;NYC issues guidelines to avoid densely packed buses, subways, or trains&quot;,
+              &quot;NYC Public Schools Close&quot;, 
+              &quot;NYC Bars and Restaurants Close for In-Person Dining&quot;,
+              &quot;Governor Cuomo announces NYC subway closures from 1 am to 5 am&quot;, 
+              &quot;NYC Begins Phase 1 Re-Opening&quot;, &quot;NYC Begins Phase 2 Re-Opening&quot;,
+              &quot;NYC Begins Phase 3 of Re-Opening (without indoor dining)&quot;,
+              &quot;NYC Begins Phase 4 of Re-Opening (excluding malls, museums, and indoor dining/bars)&quot;,
+              &quot;Elementary Students Return to Public School Classrooms across NYC&quot;,
+              &quot;NYC Schools Switch to Fully Remote&quot;),
+  start   = c(&quot;2020-03-01&quot;, &quot;2020-03-08&quot;, &quot;2020-03-16&quot;, &quot;2020-03-17&quot;, &quot;2020-04-30&quot;,
+              &quot;2020-06-08&quot;, &quot;2020-06-022&quot;, &quot;2020-07-06&quot;, &quot;2020-07-19&quot;, &quot;2020-09-29&quot;, &quot;2020-11-19&quot;),
+  end     = c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
+  style = c(&quot;border-color: black; background: #EB4646;&quot;, 
+            &quot;border-color: black; background: #EB4646;&quot;, 
+            &quot;border-color: black; background: #EB4646;&quot;, 
+            &quot;border-color: black; background: #EB4646;&quot;, 
+            &quot;border-color: black; background: #EB4646;&quot;, 
+            &quot;border-color: black; background: #46AEEB;&quot;, 
+            &quot;border-color: black; background: #46AEEB;&quot;, 
+            &quot;border-color: black; background: #46AEEB;&quot;, 
+            &quot;border-color: black; background: #46AEEB;&quot;, 
+            &quot;border-color: black; background: #46AEEB;&quot;, 
+            &quot;border-color: black; background: #EB4646;&quot;)
+  
+)
+
+timevis(
+  timeline,
+  showZoom = TRUE,
+  zoomFactor = 0.5,
+  fit = TRUE,
+  width = &quot;110%&quot;
+  )</code></pre>
+<div id="htmlwidget-63f8dbbae5e625b42bc6" class="timevis html-widget" style="width:110%;height:480px;">
+<div class="btn-group zoom-menu">
+<button type="button" class="btn btn-default btn-lg zoom-in" title="Zoom in">+</button>
+<button type="button" class="btn btn-default btn-lg zoom-out" title="Zoom out">-</button>
+</div>
+</div>
+<script type="application/json" data-for="htmlwidget-63f8dbbae5e625b42bc6">{"x":{"items":[{"id":"1","content":"First COVID Case in NYC","start":"2020-03-01","style":"border-color: black; background: #EB4646;"},{"id":"2","content":"NYC issues guidelines to avoid densely packed buses, subways, or trains","start":"2020-03-08","style":"border-color: black; background: #EB4646;"},{"id":"3","content":"NYC Public Schools Close","start":"2020-03-16","style":"border-color: black; background: #EB4646;"},{"id":"4","content":"NYC Bars and Restaurants Close for In-Person Dining","start":"2020-03-17","style":"border-color: black; background: #EB4646;"},{"id":"5","content":"Governor Cuomo announces NYC subway closures from 1 am to 5 am","start":"2020-04-30","style":"border-color: black; background: #EB4646;"},{"id":"6","content":"NYC Begins Phase 1 Re-Opening","start":"2020-06-08","style":"border-color: black; background: #46AEEB;"},{"id":"7","content":"NYC Begins Phase 2 Re-Opening","start":"2020-06-022","style":"border-color: black; background: #46AEEB;"},{"id":"8","content":"NYC Begins Phase 3 of Re-Opening (without indoor dining)","start":"2020-07-06","style":"border-color: black; background: #46AEEB;"},{"id":"9","content":"NYC Begins Phase 4 of Re-Opening (excluding malls, museums, and indoor dining/bars)","start":"2020-07-19","style":"border-color: black; background: #46AEEB;"},{"id":"10","content":"Elementary Students Return to Public School Classrooms across NYC","start":"2020-09-29","style":"border-color: black; background: #46AEEB;"},{"id":"11","content":"NYC Schools Switch to Fully Remote","start":"2020-11-19","style":"border-color: black; background: #EB4646;"}],"groups":null,"showZoom":true,"zoomFactor":0.5,"fit":true,"options":[],"height":null,"timezone":null,"api":[]},"evals":[],"jsHooks":[]}</script>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
