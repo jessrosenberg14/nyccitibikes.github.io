@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Final Project Report</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about_us.html">About Our Project</a>
+</li>
+<li>
+  <a href="Report.html">Final Project Report</a>
+</li>
+<li>
+  <a href="final_project_proposal.html">Project Proposal</a>
+</li>
+<li>
+  <a href="final_project.html">Descriptive Statistics</a>
+</li>
+<li>
+  <a href="travel_patterns.html">Travel Patterns</a>
+</li>
+<li>
+  <a href="commuting_services.html">Commuting Services</a>
+</li>
+<li>
+  <a href="shiny_dashboard.html">Subway Shiny App</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Final Project Report</h1>
+
+</div>
+
+
+<p>Notes/ questions: - confirm MTA data source - confirm with Zoe % change is 3/1/2020 to EOY 2020 - Delete prompts</p>
+<div id="motivation" class="section level1">
+<h1>Motivation</h1>
+<p>(Motivation: Provide an overview of the project goals and motivation)</p>
+<p>If you’ve been in New York for 10 days or 10 years, you’ve inevitably seen, if not ridden, one of our City’s cherished CitiBikes. Although not all New Yorkers love CitiBikes as much as our own Zoe Verzani, they are used as a primary mode of transportation (and exercise) for many NYC residents.</p>
+<p>Our project aims to examine CitiBike data from January 2019 to December 2020 to understand the impact of COVID-19 on CitiBike ridership and local travel more generally.</p>
+<p>In an effort to limit the scope of this work, our analysis focused on rides that began and ended in Manhattan. To supplement the CitiBike ridership data, our group examined other public transportation data in New York (i.e., MTA data) to understand how changes in CitiBike ridership differed or mirrored changes in subway or bus ridership during the COVID-19 pandemic.</p>
+</div>
+<div id="related-work" class="section level1">
+<h1>Related Work</h1>
+<p>(Related work: Anything that inspired you, such as a paper, a web site, or something we discussed in class.)</p>
+<p><img src="https://media.giphy.com/media/l41lW0esiJ92DmHBu/giphy.gif" /></p>
+<p><em>Pictured here: One of our group members, Zoe. Zoe is an avid CitiBike user, and it was her interest in CitiBikes that led to our initial exploration of CitiBike data.</em></p>
+<p>After examining the available data, we found that these data were relatively complete and detailed. After some initial Googling, we found that our question was of significant interest to other New Yorkers, as well.</p>
+<p>Finally, because the CitiBike data include latitudes and longitudes for both starting and ending stations, we were excited about the potential to create map-based visualizations, building on our knowledge from ggplot2 and the Visualizations modules.</p>
+</div>
+<div id="initial-questions" class="section level1">
+<h1>Initial Questions</h1>
+<p>(Initial questions: What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?)</p>
+<p>Initially, we wanted to understand how CitiBike ridership changed in response to the COVID pandemic and various events (i.e., beginning work from home, city-wide stay at home orders, etc.). We sought to examine changes in MTA ridership relative to CitiBike ridership, as well as various descriptive statistics of CitiBike riders. Changes in starting and ending destinations were also of interest – were more healthcare workers using CitiBikes during the pandemic to get to and from hospitals? Was there a reduction in trips to major business hubs such as Bryant Park/ Times Square and Financial District?</p>
+<p>While we initially wanted to show trends in sign-ups (meaning annual memberships), this became more challenging as the available data do not indicate the length of time a given user has been an annual member.</p>
+<p>Fortunately, the available data did allow us to explore our other questions and identify new ones. Ultimately, we landed on three categories of exploration:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Descriptive Statistics</strong>: Who uses CitiBike? What are the age and sex distributions of users? What days of the week are more or less popular for users to rent bikes before and during COVID-19? How did ridership compare between 2019 and 2020?</p></li>
+<li><p><strong>Travel Patterns</strong>: Where are CitiBike riders going? What are common starting points and destinations? How long are typical CitiBike rides? Do destinations shift from commercial hubs like Times Square and Brookfield Place to healthcare hubs and major hospitals between 2019 and 2020?</p></li>
+<li><p><strong>Commuting Services</strong>: How did CitiBike ridership change, if at all, due to COVID-19? How has public transportation and CitiBike ridership together changed due to COVID-19?</p></li>
+</ol>
+</div>
+<div id="data" class="section level1">
+<h1>Data</h1>
+<p>(Data: Source, scraping method, cleaning, etc.)</p>
+<p>We used two primary data sources for this work:</p>
+<div id="citibike-data" class="section level3">
+<h3><strong>CitiBike Data</strong></h3>
+<p>CitiBike ridership data are readily available through a public website. These data include CitiBike rides by month with descriptive information including: start and end stations, latitude and longitude of those stations, trip duration, and sex, birth year, and membership status of rider.</p>
+<p>The first challenge we encountered was the sheer volume of data – some months had nearly 250,000 rides across 24 csv files. We downloaded the 24 month-based ridership files, pulled the names of those files into a list, and then wrote and ran a function to read the csv files into R and conduct the following data cleaning steps:</p>
+<ul>
+<li>include only rides that <strong>start and end at stations in Manhattan</strong> (identified using a separate csv file, which listed all Manhattan states <code>manhattan_stations.csv</code>)</li>
+<li>keep rides that were <strong>at least 3 minutes in duration</strong></li>
+<li><strong>delete rides with missing or placeholder values</strong> for any variable (i.e., gender = 0),</li>
+<li>keep only rides completed by <strong>individuals who were 18-85 years old</strong> in the year of their ride, and</li>
+<li>take a <strong>random sample of 1% of rides from each month</strong> to ensure reasonable computing time.</li>
+</ul>
+<p>After obtaining the sample data above, we created the following variables, and the resulting datafile <code>manhattan_rides_df</code>:</p>
+<ul>
+<li><code>trip_min</code>: Trip duration in minutes, rather than seconds</li>
+<li><code>day_of_week</code>: Day of the week when the trip started</li>
+<li><code>start_date</code>: Date when the trip started, excluding year</li>
+<li>`stop_date: Date when the trip ended, excluding year</li>
+<li><code>year</code>: Year when trip took place</li>
+<li><code>age</code>: Age of rider during the ride subtracting birthyear from year of ride</li>
+<li><code>age_group</code>: Categorical variable identifying age group or rider (18-25, 26-35, 36-45, 46-55, 56-65, or 66-85)</li>
+</ul>
+</div>
+<div id="mta-data" class="section level3">
+<h3><strong>MTA Data</strong></h3>
+<p>Additionally, we wanted to pair the CitiBike data with data related to ridership of other forms of local transportation, namely buses and subways in New York. These data are also publicly available through the MTA website.</p>
+<p>We used two MTA datasets:</p>
+</div>
+<div id="turnstile-data" class="section level3">
+<h3>Turnstile data</h3>
+<p>Subway turnstiles data from <a href="https://data.ny.gov/Transportation/Turnstile-Usage-Data-2019/xfn5-qji9">2019</a> and <a href="https://data.ny.gov/Transportation/Turnstile-Usage-Data-2020/py8k-a8wg">2020</a> were downloaded from data.ny.gov. These datasets included information about the number of entries and exits from a given turnstile across all subway stations. We filtered to only Manhattan stations and converted latitude and longitude of stations to numeric variables, creating the <code>turnstiles_2019_m</code> and <code>turnstiles_2020_m</code> datsets. We then merged those dataset, resulting in the datafile <code>turnstiles_19_20_m</code>, which includes [add in later] variables, some of which are listed below:</p>
+<ul>
+<li><code>stop_name</code>: Station name</li>
+<li><code>daytime_routes</code>: Subway lines</li>
+<li><code>entries</code>: Number of entries at a given turnstile</li>
+<li><code>exits</code>: Number of exits at a given turnstile</li>
+</ul>
+</div>
+<div id="percent-change-data" class="section level3">
+<h3>Percent Change data</h3>
+<p>Additionally, we downloaded COVID MTA ridership data, which details the percent change in MTA ridership during COVID by transportation type.</p>
+<p>After importing and cleaning, the resulting datafile, <code>ridership_covid_pc_tidy</code>, includes the following variables:</p>
+<ul>
+<li><code>date</code>: Date</li>
+<li><code>transit_system</code>: Mode of transportation (Access a Ride, Bridges and Tunnels, Buses, LIRR, Metro North, or Subways)</li>
+<li><code>percent_change</code>: Percent change in rides from the year prior</li>
+</ul>
+</div>
+</div>
+<div id="exploratory-analysis" class="section level1">
+<h1>Exploratory Analysis</h1>
+<p>(Exploratory analysis: Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.)</p>
+<p>As outlined above, we had several categories of questions to explore and an even greater number of questions.</p>
+<div id="descriptive-statistics" class="section level3">
+<h3>Descriptive Statistics:</h3>
+<p>Ridership by date and day of week: We started the exploratory analysis by confirming our hypotheses: Did ridership go down during the initial months of COVID-19 lockdown? Generally, do we see more ridership during the week in 2019 relative to 2020 (i.e., work commuters)? These hypotheses were examined and confirmed.</p>
+<p>Trip duration by age, sex, and month: Then, we examined demographic information such as age and sex by trip duration. Upon initial examination of trip duration data, we found many outliers, namely trips of over 1,000,000 seconds. We assumed that these trips included people who did not properly dock the bikes at the end station, some who stole bikes or took them home for convenient use in the future, or similar situations. We filtered out these outliers using the IQR method and then examined trip duration using boxplots. Specifically, we generated boxplots of trip duration in minutes by gender and age group. Then, we plotted the average age of riders per month by gender.</p>
+</div>
+<div id="percent-change-in-public-transit-ridership" class="section level3">
+<h3>Percent change in public transit ridership:</h3>
+<p>• Additional analysis: If you undertake formal statistical analyses, describe these in detail • Discussion: What were your findings? Are they what you expect? What insights into the data can you make?</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

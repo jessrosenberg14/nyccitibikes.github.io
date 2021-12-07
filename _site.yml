@@ -13,6 +13,8 @@ navbar:
       href: final_project.html
     - text: "Travel Patterns"
       href: travel_patterns.html  
+    - text: "Commuting Services"
+      href: commuting_services.html  
     - text: "Subway Shiny App"
       href: shiny_dashboard.html
 output:
