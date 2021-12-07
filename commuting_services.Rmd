@@ -1,28 +1,54 @@
 ---
-title: "commuting_services"
+title: "Commuting Services"
 output: html_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r}
+library(tidyverse)
+library(viridis)
+library(lubridate)
+library(gganimate)
+library(zoo)
+library(tis)
 ```
 
-## R Markdown
+Input Citibike Membership Datafile
+```{r}
+membership_df = 
+  read_csv("ridership.csv") %>%
+  mutate(date = factor(date, ordered = TRUE, levels = c("01/2019", "02/2019", "03/2019", "04/2019",
+                                                         "05/2019", "06/2019", "07/2019", "08/2019",
+                                                         "09/2019", "10/2019", "11/2019", "12/2019",
+                                                         "01/2020", "02/2020", "03/2020", "04/2020",
+                                                         "05/2020", "06/2020", "07/2020", "08/2020",
+                                                         "09/2020", "10/2020", "11/2020", "12/2020",
+                                                         "01/2021", "02/2021", "03/2021", "04/2021",
+                                                         "05/2021", "06/2021", "07/2021", "08/2021",
+                                                         "09/2021", "10/2021"))) %>%
+  rename(ct_annual_members = annual_members) %>%
+  rename(ct_single_trip_passes = single_trip_passes) %>%
+  rename(ct_single_day_passes = single_day_passes) %>%
+  rename(ct_three_day_passes = three_day_passes) %>%
+  rename(ct_total_annual_members = total_annual_members) %>%
+  mutate(date = as.yearmon(date, "%m/%Y")) %>%
+  mutate(date = as.jul(date)) %>%
+  mutate(date = as.Date(date)) %>%
+  pivot_longer(
+    cols = starts_with("ct"),
+    names_to = "measure",
+    values_to = "count"
+  ) 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+measures_of_interest =
+  membership_df %>%
+  filter(measure %in% c("ct_annual_members","ct_single_day_passes","ct_single_trip_passes")) 
 
-```{r cars}
-summary(cars)
+measures_of_interest %>%
+  ggplot(aes(x = date, y = count)) +
+  geom_line(aes(group = measure, color = measure)) +
+  scale_color_viridis_d(option = "D") +
+  transition_reveal(date) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
