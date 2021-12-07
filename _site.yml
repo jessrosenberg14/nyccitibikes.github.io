@@ -1,0 +1,20 @@
+name: "Final Project Website"
+output_dir: "."
+navbar:
+  title: "Home"
+  right:
+    - text: "About Our Project"
+      href: about_us.html
+    - text: "Final Project Report"
+      href: Report.html
+    - text: "Project Proposal"
+      href: final_project_proposal.html
+    - text: "Descriptive Statistics"
+      href: final_project.html
+    - text: "Travel Patterns"
+      href: citibike_rides_maps.html  
+    - text: "Subway Shiny App"
+      href: shiny_dashboard.html
+output:
+  html_document:
+    theme: yeti
