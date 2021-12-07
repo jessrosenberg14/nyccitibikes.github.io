@@ -1,5 +1,5 @@
 ---
-title: "travel_patterns"
+title: "Travel Patterns"
 always_allow_html: true
 output:
   html_document:
@@ -75,7 +75,6 @@ hospitals_df =
 ```
 
 ```{r, rides in 2019 vs 2020 by month}
-#In retrospect I probably should have written a function to do this
 nyc = 
   as_tibble(
     map_data("state")
