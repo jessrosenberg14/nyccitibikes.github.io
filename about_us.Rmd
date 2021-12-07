@@ -1,0 +1,73 @@
+---
+title: "About Our Project"
+always_allow_html: true
+output: 
+  html_document:
+    toc: true
+    code_folding: hide
+    toc_float: true
+---
+
+```{r, include = FALSE}
+library(tidyverse)
+library(timevis)
+```
+
+## Screencast 
+*Insert Screencast here*
+
+## Group members 
+* Jess Rosenberg (jdr2191)
+* Zoe Verzani (zv2138)
+* Matthew Russell (mtr2143)
+* Rose Killian (rk3110)
+* Christie Zettler (cz2657)
+
+## The motivation for this project
+During the height of the pandemic, Citi Bikes played an integral part in helping to transport critical workers around NYC. Many people in NYC also likely switched from riding the subway regularly to seeking alternative transportation methods. We are interested in understanding how transportation trends across NYC changed during the pandemic and since vaccinations became widely available in early 2021. 
+
+## Timeline of COVID Events
+
+Our understanding of COVID-19 changed daily, if not hourly, at the beginning of the pandemic. The below timeline is helpful to remind ourselves of major events of 2020. 
+
+```{r}
+timeline <- data.frame(
+  id      = 1:11,
+  content = c("First COVID Case in NYC", 
+              "NYC issues guidelines to avoid densely packed buses, subways, or trains",
+              "NYC Public Schools Close", 
+              "NYC Bars and Restaurants Close for In-Person Dining",
+              "Governor Cuomo announces NYC subway closures from 1 am to 5 am", 
+              "NYC Begins Phase 1 Re-Opening", "NYC Begins Phase 2 Re-Opening",
+              "NYC Begins Phase 3 of Re-Opening (without indoor dining)",
+              "NYC Begins Phase 4 of Re-Opening (excluding malls, museums, and indoor dining/bars)",
+              "Elementary Students Return to Public School Classrooms across NYC",
+              "NYC Schools Switch to Fully Remote"),
+  start   = c("2020-03-01", "2020-03-08", "2020-03-16", "2020-03-17", "2020-04-30",
+              "2020-06-08", "2020-06-022", "2020-07-06", "2020-07-19", "2020-09-29", "2020-11-19"),
+  end     = c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
+  style = c("border-color: black; background: #EB4646;", 
+            "border-color: black; background: #EB4646;", 
+            "border-color: black; background: #EB4646;", 
+            "border-color: black; background: #EB4646;", 
+            "border-color: black; background: #EB4646;", 
+            "border-color: black; background: #46AEEB;", 
+            "border-color: black; background: #46AEEB;", 
+            "border-color: black; background: #46AEEB;", 
+            "border-color: black; background: #46AEEB;", 
+            "border-color: black; background: #46AEEB;", 
+            "border-color: black; background: #EB4646;")
+  
+)
+
+timevis(
+  timeline,
+  showZoom = TRUE,
+  zoomFactor = 0.5,
+  fit = TRUE,
+  width = "110%"
+  )
+```
+
+
+
