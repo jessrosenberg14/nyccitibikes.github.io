@@ -1,8 +1,13 @@
 ---
 title: "Commuting Services"
-output: html_document
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source_code: embed
 ---
 ```{r}
+library(flexdashboard)
 library(tidyverse)
 library(viridis)
 library(lubridate)
@@ -10,10 +15,9 @@ library(gganimate)
 library(zoo)
 library(tis)
 library(scales)
-```
+library(plotly)
 
-Input Citibike Membership Datafile
-```{r}
+#Input Citibike Membership Datafile
 membership_df = 
   read_csv("ridership.csv") %>%
   mutate(date = factor(date, ordered = TRUE, levels = c("01/2019", "02/2019", "03/2019", "04/2019",
@@ -43,7 +47,14 @@ membership_df =
 measures_of_interest =
   membership_df %>%
   filter(measure %in% c("ct_annual_members","ct_single_day_passes","ct_single_trip_passes")) 
+```
 
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
 measures_of_interest %>%
   ggplot(aes(x = date, y = count)) +
   geom_line(aes(group = measure, color = measure)) +

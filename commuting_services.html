@@ -279,16 +279,9 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-## ✓ tibble  3.1.5     ✓ dplyr   1.0.7
-## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-## ✓ readr   2.0.2     ✓ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(viridis)</code></pre>
+<pre class="r"><code>library(flexdashboard)
+library(tidyverse)
+library(viridis)</code></pre>
 <pre><code>## Loading required package: viridisLite</code></pre>
 <pre class="r"><code>library(lubridate)</code></pre>
 <pre><code>## 
@@ -324,8 +317,20 @@ library(zoo)</code></pre>
 <pre><code>## The following object is masked from &#39;package:readr&#39;:
 ## 
 ##     col_factor</code></pre>
-<p>Input Citibike Membership Datafile</p>
-<pre class="r"><code>membership_df = 
+<pre class="r"><code>library(plotly)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;plotly&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     last_plot</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     filter</code></pre>
+<pre><code>## The following object is masked from &#39;package:graphics&#39;:
+## 
+##     layout</code></pre>
+<pre class="r"><code>#Input Citibike Membership Datafile
+membership_df = 
   read_csv(&quot;ridership.csv&quot;) %&gt;%
   mutate(date = factor(date, ordered = TRUE, levels = c(&quot;01/2019&quot;, &quot;02/2019&quot;, &quot;03/2019&quot;, &quot;04/2019&quot;,
                                                          &quot;05/2019&quot;, &quot;06/2019&quot;, &quot;07/2019&quot;, &quot;08/2019&quot;,
@@ -359,9 +364,12 @@ library(zoo)</code></pre>
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <pre class="r"><code>measures_of_interest =
   membership_df %&gt;%
-  filter(measure %in% c(&quot;ct_annual_members&quot;,&quot;ct_single_day_passes&quot;,&quot;ct_single_trip_passes&quot;)) 
-
-measures_of_interest %&gt;%
+  filter(measure %in% c(&quot;ct_annual_members&quot;,&quot;ct_single_day_passes&quot;,&quot;ct_single_trip_passes&quot;)) </code></pre>
+<div id="column" class="section level2" data-width="650">
+<h2>Column</h2>
+<div id="chart-a" class="section level3">
+<h3>Chart A</h3>
+<pre class="r"><code>measures_of_interest %&gt;%
   ggplot(aes(x = date, y = count)) +
   geom_line(aes(group = measure, color = measure)) +
   geom_point(aes(group = seq_along(date), color = measure)) +
@@ -380,6 +388,8 @@ measures_of_interest %&gt;%
   guides(color = guide_legend(nrow = 2, byrow = TRUE)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))</code></pre>
 <p><img src="commuting_services_files/figure-html/unnamed-chunk-2-1.gif" /><!-- --></p>
+</div>
+</div>
 
 
 
