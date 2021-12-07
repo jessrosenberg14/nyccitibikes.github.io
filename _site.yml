@@ -12,7 +12,7 @@ navbar:
     - text: "Descriptive Statistics"
       href: final_project.html
     - text: "Travel Patterns"
-      href: citibike_rides_maps.html  
+      href: travel_patterns.html  
     - text: "Subway Shiny App"
       href: shiny_dashboard.html
 output:
