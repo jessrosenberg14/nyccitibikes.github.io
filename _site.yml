@@ -17,6 +17,8 @@ navbar:
       href: commuting_services.html  
     - text: "Subway Shiny App"
       href: shiny_dashboard.html
+    - icon: fas fa-biking
+      href: http://account.citibikenyc.com/access-plans
 output:
   html_document:
     theme: yeti

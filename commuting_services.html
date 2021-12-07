@@ -30,8 +30,11 @@
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -215,6 +218,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -265,12 +271,26 @@ $(document).ready(function () {
 <li>
   <a href="shiny_dashboard.html">Subway Shiny App</a>
 </li>
+<li>
+  <a href="http://account.citibikenyc.com/access-plans">
+    <span class="fas fa-biking"></span>
+     
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
 <div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
 
@@ -281,55 +301,15 @@ $(document).ready(function () {
 
 <pre class="r"><code>library(flexdashboard)
 library(tidyverse)
-library(viridis)</code></pre>
-<pre><code>## Loading required package: viridisLite</code></pre>
-<pre class="r"><code>library(lubridate)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;lubridate&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     date, intersect, setdiff, union</code></pre>
-<pre class="r"><code>library(gganimate)
-library(zoo)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;zoo&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     as.Date, as.Date.numeric</code></pre>
-<pre class="r"><code>library(tis)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;tis&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:lubridate&#39;:
-## 
-##     day, hms, month, period, POSIXct, quarter, today, year, ymd</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     between</code></pre>
-<pre class="r"><code>library(scales)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;scales&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:viridis&#39;:
-## 
-##     viridis_pal</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     discard</code></pre>
-<pre><code>## The following object is masked from &#39;package:readr&#39;:
-## 
-##     col_factor</code></pre>
-<pre class="r"><code>library(plotly)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;plotly&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
-## 
-##     last_plot</code></pre>
-<pre><code>## The following object is masked from &#39;package:stats&#39;:
-## 
-##     filter</code></pre>
-<pre><code>## The following object is masked from &#39;package:graphics&#39;:
-## 
-##     layout</code></pre>
-<pre class="r"><code>#Input Citibike Membership Datafile
+library(viridis)
+library(lubridate)
+library(gganimate)
+library(zoo)
+library(tis)
+library(scales)
+library(plotly)
+
+#Input Citibike Membership Datafile
 membership_df = 
   read_csv(&quot;ridership.csv&quot;) %&gt;%
   mutate(date = factor(date, ordered = TRUE, levels = c(&quot;01/2019&quot;, &quot;02/2019&quot;, &quot;03/2019&quot;, &quot;04/2019&quot;,
@@ -353,22 +333,12 @@ membership_df =
     cols = starts_with(&quot;ct&quot;),
     names_to = &quot;measure&quot;,
     values_to = &quot;count&quot;
-  ) </code></pre>
-<pre><code>## Rows: 34 Columns: 6</code></pre>
-<pre><code>## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (1): date
-## dbl (5): annual_members, single_trip_passes, single_day_passes, three_day_pa...</code></pre>
-<pre><code>## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>measures_of_interest =
+  ) 
+
+
+measures_of_interest =
   membership_df %&gt;%
   filter(measure %in% c(&quot;ct_annual_members&quot;,&quot;ct_single_day_passes&quot;,&quot;ct_single_trip_passes&quot;)) </code></pre>
-<div id="column" class="section level2" data-width="650">
-<h2>Column</h2>
-<div id="chart-a" class="section level3">
-<h3>Chart A</h3>
 <pre class="r"><code>measures_of_interest %&gt;%
   ggplot(aes(x = date, y = count)) +
   geom_line(aes(group = measure, color = measure)) +
@@ -388,8 +358,6 @@ membership_df =
   guides(color = guide_legend(nrow = 2, byrow = TRUE)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))</code></pre>
 <p><img src="commuting_services_files/figure-html/unnamed-chunk-2-1.gif" /><!-- --></p>
-</div>
-</div>
 
 
 
@@ -424,6 +392,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

@@ -1,12 +1,11 @@
 ---
 title: "Commuting Services"
-output: 
-  flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: fill
-    source_code: embed
+always_allow_html: true
+output:
+  html_document:
+    code_folding: hide
 ---
-```{r}
+```{r, message=FALSE}
 library(flexdashboard)
 library(tidyverse)
 library(viridis)
@@ -49,10 +48,6 @@ measures_of_interest =
   filter(measure %in% c("ct_annual_members","ct_single_day_passes","ct_single_trip_passes")) 
 ```
 
-Column {data-width=650}
------------------------------------------------------------------------
-
-### Chart A
 
 ```{r}
 measures_of_interest %>%
