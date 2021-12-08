@@ -29,7 +29,7 @@ In an effort to limit the scope of this work, our analysis focused on rides that
 
 *Pictured here: One of our group members, Zoe. Zoe is an avid CitiBike user, and it was her interest in CitiBikes that led to our initial exploration of CitiBike data.*
 
-After examining the available data, we found that these data were relatively complete and detailed. After some initial Googling, we found that our question was of significant interest to other New Yorkers, as well. 
+After examining the available data, we found that these data were relatively complete and detailed. After some initial Googling, we found that our question was of significant interest to [other New Yorkers](https://medium.com/qri-io/building-a-daily-aggregate-dataset-from-raw-citibike-trip-data-2b6502009871), as well. 
 
 Finally, because the CitiBike data include latitudes and longitudes for both starting and ending stations, we were excited about the potential to create map-based visualizations, building on our knowledge from ggplot2 and the Visualizations modules. 
 
