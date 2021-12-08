@@ -1,11 +1,13 @@
 ---
 title: "Commuting Services"
 always_allow_html: true
-output:
+output: 
   html_document:
+    toc: true
     code_folding: hide
+    toc_float: true
 ---
-```{r, message=FALSE}
+```{r setup, include=FALSE}
 library(flexdashboard)
 library(tidyverse)
 library(viridis)
@@ -15,8 +17,8 @@ library(zoo)
 library(tis)
 library(scales)
 library(plotly)
-
-#Input Citibike Membership Datafile
+```
+```{r input citibike membership data, include=FALSE}
 membership_df = 
   read_csv("ridership.csv") %>%
   mutate(date = factor(date, ordered = TRUE, levels = c("01/2019", "02/2019", "03/2019", "04/2019",
@@ -45,11 +47,10 @@ membership_df =
 
 measures_of_interest =
   membership_df %>%
-  filter(measure %in% c("ct_annual_members","ct_single_day_passes","ct_single_trip_passes")) 
+  filter(measure %in% c("ct_annual_members","ct_single_day_passes","ct_single_trip_passes"))
 ```
 
-
-```{r}
+```{r animated graph, message=FALSE}
 measures_of_interest %>%
   ggplot(aes(x = date, y = count)) +
   geom_line(aes(group = measure, color = measure)) +
@@ -70,9 +71,21 @@ measures_of_interest %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
-## Average Ride length per month
+```{r, input manhattan rides data, message=FALSE}
+manhattan_rides_df <- read_csv("manhattan_rides.csv")
 
-```{r, average ride length per month}
+manhattan_rides_df <-
+  manhattan_rides_df %>% 
+  mutate(
+    day_of_week = factor(day_of_week, ordered = T, 
+                         levels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")), 
+    year = factor(year), 
+    age_group = factor(age_group, ordered = T,
+                       levels = c("18-25","26-35", "36-45", "46-55", "56-65", "66-85")), 
+    gender = type.convert(gender, as.is = F))
+```
+
+```{r, average ride length per month, message=FALSE warning=F}
 manhattan_rides_df %>% 
   group_by(year) %>% 
   mutate(
@@ -94,9 +107,7 @@ manhattan_rides_df %>%
 
 Looks like maybe the overall length of trips in 2019 was more consistent. 2020 had a bump in duration of rides, starting in April. Overall, trip length seems more variable in 2020.
 
-## Number of rides per month 
-
-```{r, number of rides per month}
+```{r, number of rides per month, message=FALSE warning=F}
 manhattan_rides_df %>% 
   group_by(year) %>% 
   mutate(
