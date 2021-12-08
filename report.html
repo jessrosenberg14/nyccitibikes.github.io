@@ -375,7 +375,7 @@ div.tocify {
 </div>
 
 
-<p>Notes/ questions: - confirm MTA data source - confirm with Zoe % change is 3/1/2020 to EOY 2020 - Delete prompts</p>
+<p>Notes/ questions: - Delete prompts</p>
 <div id="motivation" class="section level1">
 <h1>Motivation</h1>
 <p>(Motivation: Provide an overview of the project goals and motivation)</p>
@@ -388,7 +388,7 @@ div.tocify {
 <p>(Related work: Anything that inspired you, such as a paper, a web site, or something we discussed in class.)</p>
 <p><img src="https://media.giphy.com/media/l41lW0esiJ92DmHBu/giphy.gif" /></p>
 <p><em>Pictured here: One of our group members, Zoe. Zoe is an avid CitiBike user, and it was her interest in CitiBikes that led to our initial exploration of CitiBike data.</em></p>
-<p>After examining the available data, we found that these data were relatively complete and detailed. After some initial Googling, we found that our question was of significant interest to other New Yorkers, as well.</p>
+<p>After examining the available data, we found that these data were relatively complete and detailed. After some initial Googling, we found that our question was of significant interest to <a href="https://medium.com/qri-io/building-a-daily-aggregate-dataset-from-raw-citibike-trip-data-2b6502009871">other New Yorkers</a>, as well.</p>
 <p>Finally, because the CitiBike data include latitudes and longitudes for both starting and ending stations, we were excited about the potential to create map-based visualizations, building on our knowledge from ggplot2 and the Visualizations modules.</p>
 </div>
 <div id="initial-questions" class="section level1">
@@ -436,7 +436,7 @@ div.tocify {
 </div>
 <div id="turnstile-data" class="section level3">
 <h3>Turnstile data</h3>
-<p>Subway turnstiles data from <a href="https://data.ny.gov/Transportation/Turnstile-Usage-Data-2019/xfn5-qji9">2019</a> and <a href="https://data.ny.gov/Transportation/Turnstile-Usage-Data-2020/py8k-a8wg">2020</a> were downloaded from data.ny.gov. These datasets included information about the number of entries and exits from a given turnstile across all subway stations. We filtered to only Manhattan stations and converted latitude and longitude of stations to numeric variables, creating the <code>turnstiles_2019_m</code> and <code>turnstiles_2020_m</code> datsets. We then merged those dataset, resulting in the datafile <code>turnstiles_19_20_m</code>, which includes [add in later] variables, some of which are listed below:</p>
+<p>Subway turnstiles data from <a href="https://data.ny.gov/Transportation/Turnstile-Usage-Data-2019/xfn5-qji9">2019</a> and <a href="https://data.ny.gov/Transportation/Turnstile-Usage-Data-2020/py8k-a8wg">2020</a> were downloaded from data.ny.gov. These datasets included information about the number of entries and exits from a given turnstile across all subway stations. We filtered to only Manhattan stations and converted latitude and longitude of stations to numeric variables, creating the <code>turnstiles_2019_m</code> and <code>turnstiles_2020_m</code> datsets. We then merged those dataset, resulting in the datafile <code>turnstiles_19_20_m</code>, which includes 12 variables, some of which are listed below:</p>
 <ul>
 <li><code>stop_name</code>: Station name</li>
 <li><code>daytime_routes</code>: Subway lines</li>
@@ -446,7 +446,7 @@ div.tocify {
 </div>
 <div id="percent-change-data" class="section level3">
 <h3>Percent Change data</h3>
-<p>Additionally, we downloaded COVID MTA ridership data, which details the percent change in MTA ridership during COVID by transportation type.</p>
+<p>Additionally, we downloaded <a href="https://new.mta.info/coronavirus/ridership">COVID MTA ridership data</a>, which details the percent change in MTA ridership during COVID by transportation type.</p>
 <p>After importing and cleaning, the resulting datafile, <code>ridership_covid_pc_tidy</code>, includes the following variables:</p>
 <ul>
 <li><code>date</code>: Date</li>
