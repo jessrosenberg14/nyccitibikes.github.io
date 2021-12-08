@@ -89,7 +89,7 @@ manhattan_rides_df %>%
   summarize(min = min(age), max = max(age), obs = n())
 ```
 
-```{r, average ride length per month, message=FALSE warning=F}
+```{r, average ride length per month, message=FALSE, warning=F}
 manhattan_rides_df %>% 
   group_by(year) %>% 
   mutate(
@@ -111,7 +111,7 @@ manhattan_rides_df %>%
 
 Looks like maybe the overall length of trips in 2019 was more consistent. 2020 had a bump in duration of rides, starting in April. Overall, trip length seems more variable in 2020.
 
-```{r, number of rides per month, message=FALSE warning=F}
+```{r, number of rides per month, message=FALSE, warning=F}
 manhattan_rides_df %>% 
   group_by(year) %>% 
   mutate(
