@@ -70,3 +70,51 @@ measures_of_interest %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
+## Average Ride length per month
+
+```{r, average ride length per month}
+manhattan_rides_df %>% 
+  group_by(year) %>% 
+  mutate(
+    month = month(starttime, label = T)
+  ) %>% 
+  filter(tripduration < 2500) %>% 
+  plot_ly(
+    x = ~month, 
+    y = ~trip_min,
+    color = ~year,
+    type = "box") %>% 
+  layout(
+    boxmode = "group",
+    title = "Duration of Citibike Rides by Month",
+    xaxis = list(title = "Month"),
+    yaxis = list(title = "Trip Duration in Minutes")
+    )
+```
+
+Looks like maybe the overall length of trips in 2019 was more consistent. 2020 had a bump in duration of rides, starting in April. Overall, trip length seems more variable in 2020.
+
+## Number of rides per month 
+
+```{r, number of rides per month}
+manhattan_rides_df %>% 
+  group_by(year) %>% 
+  mutate(
+    month = month(starttime, label = T)
+  ) %>% 
+  group_by(year, month) %>% 
+  summarise(obs = n()) %>% 
+  plot_ly(
+    x = ~month, 
+    y = ~obs, 
+    color = ~year,
+    type = "scatter",
+    mode = "lines") %>%  
+  layout(
+    title = "Number of Citibike Rides per Month",
+    xaxis = list(title = "Month"),
+    yaxis = list(title = "Rides")
+  )
+```
+
+Huge drop in monthly trips in April 2020. Lockdown started mid/late March so this coincides with people transitioning to WFH and largely staying inside to minimize contacts. The ride numbers bounce back quite a bit after this but not to 2019 levels.
