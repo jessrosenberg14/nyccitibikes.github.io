@@ -50,6 +50,8 @@ measures_of_interest =
   filter(measure %in% c("ct_annual_members","ct_single_day_passes","ct_single_trip_passes"))
 ```
 
+## CitiBike Memberships Purchased by Month in NYC and New Jersey City
+
 ```{r animated graph, message=FALSE}
 measures_of_interest %>%
   ggplot(aes(x = date, y = count)) +
@@ -73,6 +75,8 @@ measures_of_interest %>%
 
 This animated graph displays changes in CitiBike annual passes, single-day passes and single-trip passes from January 2019 through November 2021 (when we last pulled these reports). As seen by this graph, spikes in memberhsip tend to occur in summer months. During the COVID-19 pandemic, there was a major spike in all forms
 of CitiBike memberships from April 2020 through August 2020 and this spike was most significant for single-trip purchases. Another even more significant spike occurred from May 2021 through August 2021. 
+
+## Ridership Transit System Percent Change Following COVID
 
 ```{r, input manhattan rides data, message=FALSE}
 manhattan_rides_df <- read_csv("manhattan_rides.csv")
@@ -191,3 +195,26 @@ renamed_ridership %>%
 ```
 
 This plot shows the percent change in ridership in 2020 compared to 2019 for various transit services across NYC. By this graph we can see that every transit service experienced a drop in ridership in March 2020 compared to 2019 levels, coinciding with the start of lockdown. However, Citi Bike usage recovered and in many cases exceeded its 2019 levels, while all other forms of transit stayed below the usage levels seen in 2019.
+
+## Shiny App: Subway Ridership Percent Change from 2019 to 2020 
+
+We created a shiny app to visualize subway ridership change from 2019 to 2020, which you can view [here] (https://zoeverzani.shinyapps.io/subway_ridership/). 
+
+To interact with this app:
+
+ 1. Select a Manhattan location and watch how both the map and plot below it change. 
+
+2. The red icon represents the bike station closest to the Manhattan destination you selected
+
+3. The green icon represents the bike station where most trips ending at the station near your destination begin
+
+4. The building icon represents the destination you selected. 
+
+5. Click on the map icons to learn more.
+
+6. Note how the average age of riders compared to the selected destination changes in the lollipop plot under the map. 
+
+7. These paths between stations are just there to give you an idea of the distance between stations and relative to the destination. They are not recommended paths (*please* - don't try to ride through the Central Park reservoir)
+
+
+
