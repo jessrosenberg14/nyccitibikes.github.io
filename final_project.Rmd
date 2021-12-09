@@ -34,7 +34,6 @@ manhattan_rides_df <-
 ## CitiBike Rides over the year 
 
 Overall and as expected, there were more CitiBike rides in 2019 beginning in the peak months of the pandemic in 2020. 
-*FIX AXIS* 
 
 ```{r, Rides per day summary}
 manhattan_rides_df %>% 
