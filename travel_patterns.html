@@ -304,6 +304,8 @@ manhattan_rides_df &lt;-
     age_group = factor(age_group, ordered = T,
                        levels = c(&quot;18-25&quot;,&quot;26-35&quot;, &quot;36-45&quot;, &quot;46-55&quot;, &quot;56-65&quot;, &quot;66-85&quot;))
   )</code></pre>
+<div id="rides-by-day-of-week" class="section level2">
+<h2>Rides by day of week</h2>
 <pre class="r"><code>manhattan_rides_df %&gt;% 
   group_by(day_of_week, year) %&gt;% 
   summarize(obs = n()) %&gt;% 
@@ -314,6 +316,10 @@ manhattan_rides_df &lt;-
   ggtitle(&quot;Citibike Rides by Day of the Week&quot;) +
   theme(plot.title = element_text(hjust = 0.5))</code></pre>
 <p><img src="travel_patterns_files/figure-html/Rides%20by%20day%20of%20week-1.png" width="672" /></p>
+<p>The number of rides per day was higher in 2019 during the week than in 2020, likely due to the shift to working from home in 2020. Interestingly, there were slightly more rides on the weekends in 2020, likely because of a predisposition to use biking as a mode of transportation, rather than subways, during COVID-19.</p>
+</div>
+<div id="monthly-destinations-in-2019-vs.-2020" class="section level2">
+<h2>Monthly destinations in 2019 vs. 2020</h2>
 <pre class="r"><code>hubs_df = 
   read_csv(&quot;hubs.csv&quot;) %&gt;% 
   drop_na()
@@ -400,6 +406,9 @@ for (i in 2:12) {
 new_month_gif</code></pre>
 <p><img src="travel_patterns_files/figure-html/rides%20in%202019%20vs%202020%20by%20month-1.gif" /><!-- --></p>
 <p>In mid-2020, Citi Bike expanded stops into northern Manhattan, driving the expansion of the bubble graph area seen in late-2020. We can see that 2020 started off with more rides than 2019, but then decreased significantly in March. Ridership numbers recovered a bit later in the year, but not quite to 2019 levels.</p>
+</div>
+<div id="daily-destinations-in-2019-and-2020-in-lower-manhattan" class="section level2">
+<h2>Daily destinations in 2019 and 2020 in lower Manhattan</h2>
 <pre class="r"><code>bikes_2019 = manhattan_rides_df %&gt;% 
   filter(year == &quot;2019&quot;) %&gt;% 
     group_by(stop_date, end_station_longitude, end_station_latitude) %&gt;% 
@@ -482,6 +491,21 @@ for (i in 2:60) {
 new_daily_gif</code></pre>
 <p><img src="travel_patterns_files/figure-html/zoomed%20daily%20map-1.gif" /><!-- --></p>
 <p>This graph displays the daily ridership in 2019 vs 2020 for lower Manhattan. Even more than in the monthly graph above, this makes apparent how drastically the usage of Citi Bike dropped in late-March 2020 compared to 2019. The areas of the city that were still utilized during this drop tended to be near either financial hubs or hospitals, marked with green or red dots respectively.</p>
+</div>
+<div id="shiny-app-common-rides-to-manhattan-locations" class="section level2">
+<h2>Shiny App: Common Rides to Manhattan Locations:</h2>
+<p>We created a shiny app to visualize the journeys to various Manhattan locations, which you can view <a href="https://mtr2143.shinyapps.io/shiny_end_stations/">here</a>.</p>
+<p>To interact with this app:</p>
+<ol style="list-style-type: decimal">
+<li><p>Select a Manhattan location and watch how both the map and plot below it change.</p></li>
+<li><p>The red icon represents the bike station closest to the Manhattan destination you selected</p></li>
+<li><p>The green icon represents the bike station where most trips ending at the station near your destination begin</p></li>
+<li><p>The building icon represents the destination you selected.</p></li>
+<li><p>Click on the map icons to learn more.</p></li>
+<li><p>Note how the average age of riders compared to the selected destination changes in the lollipop plot under the map.</p></li>
+<li><p>These paths between stations are just there to give you an idea of the distance between stations and relative to the destination. They are not recommended paths (<em>please</em> - don’t try to ride through the Central Park reservoir)</p></li>
+</ol>
+</div>
 
 
 

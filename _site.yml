@@ -4,15 +4,17 @@ navbar:
   title: "About Our Project"
   right:
     - text: "Final Project Report"
-      href: Report.html
+      href: report.html
     - text: "Descriptive Statistics"
       href: final_project.html
     - text: "Travel Patterns"
       href: travel_patterns.html  
     - text: "Commuting Services"
       href: commuting_services.html  
+    - text: "CitiBike Destinations Shiny App"
+      href: https://mtr2143.shinyapps.io/shiny_end_stations/ 
     - text: "Subway Shiny App"
-      href: shiny_dashboard.html
+      href: https://zoeverzani.shinyapps.io/subway_ridership/
     - icon: fas fa-bicycle
       href: http://account.citibikenyc.com/access-plans
 output:
