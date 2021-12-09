@@ -160,8 +160,18 @@ ridership_pc_change =
 ```
 
 ```{r, plot with everything, message=FALSE, warning=F}
+renamed_ridership = 
+  ridership_pc_change %>%
+    mutate(transit_system = factor(transit_system, levels = c("access_a_ride", "bridges_and_tunnels",
+                                                              "buses", "citi_bike", "lirr", "metro_north",
+                                                              "subways"), 
+                                   labels = c("Access a Ride", "Bridges and Tunnels", "Buses",
+                                              "Citi Bike", "Long Island Railroad", "Metro North",
+                                              "Subways")))
+      
+
 # Using plotly 
-ridership_pc_change %>% 
+renamed_ridership %>% 
   ungroup() %>% 
   drop_na() %>% 
   filter(date >= as.Date('2020-03-01')) %>% 
