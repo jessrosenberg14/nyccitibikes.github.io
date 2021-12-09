@@ -79,7 +79,6 @@ closest_station_info_fn <- function(nyc_lat, nyc_long) {
     ) %>% 
     group_by(end_station_id, end_station_name, end_station_latitude, end_station_longitude) %>% 
     summarize(
-      avg_trip_min = mean(tripduration/60), 
       avg_age = mean(age)
     ) %>% 
     ungroup() %>%
@@ -89,7 +88,7 @@ closest_station_info_fn <- function(nyc_lat, nyc_long) {
     rename_with(~str_replace(., "^end_station_", "end_")) %>% 
     rename_with(~str_replace(., "^start_station_", "start_")) %>% 
     select(!total_trips) %>% 
-    relocate(avg_trip_min:avg_age, .after = start_longitude)
+    relocate(avg_age, .after = start_longitude)
   
   return(avg_table)
   
@@ -118,17 +117,6 @@ nyc <-
   group_by(location) %>% 
   slice_max(order_by = distance_to_start) %>% 
   select(!distance_to_start) %>% 
-  mutate(
-    mi_from_end = geodist_vec(
-      x1 = location_long, 
-      y1 = location_lat, 
-      x2 = end_longitude, 
-      y2 = end_latitude,
-      paired = T, 
-      measure = "vincenty"
-    ) / 1609.344
-  ) %>% 
-  relocate(mi_from_end, .before = start_id) %>% 
   ungroup()
 
 nyc_choices <-
