@@ -5,9 +5,9 @@ account: mtr2143
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5288385
-bundleId: 5343667
+bundleId: 5351112
 url: https://mtr2143.shinyapps.io/shiny_end_stations/
-when: 1638935849.96462
-lastSyncTime: 1638935849.96463
+when: 1639067486.88792
+lastSyncTime: 1639067486.88794
 asMultiple: FALSE
 asStatic: FALSE
