@@ -32,7 +32,7 @@ Finally, because the CitiBike data include latitudes and longitudes for both sta
 
 Initially, we wanted to understand how CitiBike ridership changed in response to the COVID pandemic and various events (i.e., beginning work from home, city-wide stay at home orders, etc.). We sought to examine changes in MTA ridership relative to CitiBike ridership, as well as various descriptive statistics of CitiBike riders. Common routes, meaning typical starting and ending destinations, were also of interest.  
 
-While we initially wanted to show trends in sign-ups (meaning annual memberships), this became more challenging as the available data do not indicate the length of time a given user has been an annual member. 
+While we initially wanted to examine trends in riderships specifically related to hospital workers using CitiBike to get to and from work, we were not able to do this, as available data do not indicate industry in which a rider works. 
 
 Fortunately, the available data did allow us to explore our other questions and identify new ones. Ultimately, we landed on three categories of exploration: 
 
@@ -118,6 +118,41 @@ manhattan_rides_df <-
 We then wrote this to a csv. 
 ```{r, write all manhattan rides to a df, eval = FALSE}
 write_csv(manhattan_rides_df, "manhattan_rides.csv")
+```
+
+Additionally, we pulled the [CitiBike Monthly Operating Reports] (https://ride.citibikenyc.com/system-data/operating-reports) and combined information on the number of each Membership type into a single dataset. This was used to show changes in CitiBike annual passes, single-day passes and single-trip passes from January 2019 through November 2021 (when we last
+pulled these reports).
+
+```{r input citibike membership data, eval = FALSE}
+membership_df = 
+  read_csv("ridership.csv") %>%
+  mutate(date = factor(date, ordered = TRUE, levels = c("01/2019", "02/2019", "03/2019", "04/2019",
+                                                         "05/2019", "06/2019", "07/2019", "08/2019",
+                                                         "09/2019", "10/2019", "11/2019", "12/2019",
+                                                         "01/2020", "02/2020", "03/2020", "04/2020",
+                                                         "05/2020", "06/2020", "07/2020", "08/2020",
+                                                         "09/2020", "10/2020", "11/2020", "12/2020",
+                                                         "01/2021", "02/2021", "03/2021", "04/2021",
+                                                         "05/2021", "06/2021", "07/2021", "08/2021",
+                                                         "09/2021", "10/2021"))) %>%
+  rename(ct_annual_members = annual_members) %>%
+  rename(ct_single_trip_passes = single_trip_passes) %>%
+  rename(ct_single_day_passes = single_day_passes) %>%
+  rename(ct_three_day_passes = three_day_passes) %>%
+  rename(ct_total_annual_members = total_annual_members) %>%
+  mutate(date = as.yearmon(date, "%m/%Y")) %>%
+  mutate(date = as.jul(date)) %>%
+  mutate(date = as.Date(date)) %>%
+  pivot_longer(
+    cols = starts_with("ct"),
+    names_to = "measure",
+    values_to = "count"
+  ) 
+
+
+measures_of_interest =
+  membership_df %>%
+  filter(measure %in% c("ct_annual_members","ct_single_day_passes","ct_single_trip_passes"))
 ```
 
 ### **MTA Data**
@@ -363,7 +398,30 @@ Next, we looked at how travel patterns changed during the pandemic.
 
 ### Commuting Services 
 
-**ADD info here** 
+In this part of our analysis, we wanted to examine CitiBike usage by itself and relative to other commuting services (i.e., MTA). 
+
+**CitiBike Memberships Purchased by Month in NYC and New Jersey City**: This animated graph demonstrates the growth of single day passes in the summer of 2020 and 2021 relative 2019. 
+
+```{r animated graph, eval = FALSE}
+measures_of_interest %>%
+  ggplot(aes(x = date, y = count)) +
+  geom_line(aes(group = measure, color = measure)) +
+  geom_point(aes(group = seq_along(date), color = measure)) +
+  transition_reveal(date) +
+  scale_x_date(breaks = "4 months", labels = date_format("%b-%Y")) +
+  scale_colour_discrete(name = "Membership Type",
+                        breaks = c("ct_annual_members", "ct_single_day_passes",
+                                   "ct_single_trip_passes"),
+                        labels = c("Annual Passes Renewed or Purchased",
+                                   "Single-Day Passes Purchased",
+                                   "Single-Trip Passes Purchased")) +
+  labs(x = "Date", y = "Count") +
+  ggtitle("CitiBike Memberships Purchased by Month in NYC and New Jersey City") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(nrow = 2, byrow = TRUE)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
 
 # Additional Analysis 
 
