@@ -227,6 +227,7 @@ server <- function(input, output) {
         color = ifelse(without_choice$avg_age > choice_only$avg_age[[1]], "blue", "red"),
         size = 4
       ) +
+      geom_vline(xintercept = choice_only$avg_age[[1]]) +
       theme_light() +
       theme(
         panel.grid.major.y = element_blank(), 
