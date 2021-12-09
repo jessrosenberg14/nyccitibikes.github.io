@@ -8,12 +8,7 @@ output:
     toc_float: true
 ---
 
-Notes/ questions: 
-- Delete prompts
-
 # Motivation 
-
-(Motivation: Provide an overview of the project goals and motivation)
 
 If you've been in New York for 10 days or 10 years, you've inevitably seen, if not ridden, one of our City's cherished CitiBikes. Although not all New Yorkers love CitiBikes as much as our own Zoe Verzani, they are used as a primary mode of transportation (and exercise) for many NYC residents. 
 
@@ -22,8 +17,6 @@ Our project aims to examine CitiBike data from January 2019 to December 2020 to 
 In an effort to limit the scope of this work, our analysis focused on rides that began and ended in Manhattan. To supplement the CitiBike ridership data, our group examined other public transportation data in New York (i.e., MTA data) to understand how changes in CitiBike ridership differed or mirrored changes in subway or bus ridership during the COVID-19 pandemic. 
 
 # Related Work 
-
-(Related work: Anything that inspired you, such as a paper, a web site, or something we discussed in class.) 
 
 ![](https://media.giphy.com/media/l41lW0esiJ92DmHBu/giphy.gif)
 
@@ -37,7 +30,7 @@ Finally, because the CitiBike data include latitudes and longitudes for both sta
 
 (Initial questions: What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?) 
 
-Initially, we wanted to understand how CitiBike ridership changed in response to the COVID pandemic and various events (i.e., beginning work from home, city-wide stay at home orders, etc.). We sought to examine changes in MTA ridership relative to CitiBike ridership, as well as various descriptive statistics of CitiBike riders. Common routes, meaning typical starting and ending destinations, were also of interest – *CHECK THIS* were more healthcare workers using CitiBikes during the pandemic to get to and from hospitals? Was there a reduction in trips to major business hubs such as Bryant Park/ Times Square and Financial District? 
+Initially, we wanted to understand how CitiBike ridership changed in response to the COVID pandemic and various events (i.e., beginning work from home, city-wide stay at home orders, etc.). We sought to examine changes in MTA ridership relative to CitiBike ridership, as well as various descriptive statistics of CitiBike riders. Common routes, meaning typical starting and ending destinations, were also of interest.  
 
 While we initially wanted to show trends in sign-ups (meaning annual memberships), this became more challenging as the available data do not indicate the length of time a given user has been an annual member. 
 
@@ -45,13 +38,11 @@ Fortunately, the available data did allow us to explore our other questions and 
 
 1.    **Descriptive Statistics**: Who uses CitiBike? What are the age and sex distributions of users? What days of the week are more or less popular for users to rent bikes before and during COVID-19?  How did ridership compare between 2019 and 2020? 
 
-2.    **Travel Patterns**: Where are CitiBike riders going? What are common starting points and destinations? How long are typical CitiBike rides? *HERE* Do destinations shift from commercial hubs like Times Square and Brookfield Place to healthcare hubs and major hospitals between 2019 and 2020? 
+2.    **Travel Patterns**: Where are CitiBike riders going? What are common starting points and destinations? How long are typical CitiBike rides? Did travel patterns change between 2019 and 2020? 
 
 3.    **Commuting Services**: How did CitiBike ridership change, if at all, due to COVID-19? How has public transportation and CitiBike ridership together changed due to COVID-19? 
 
 # Data
-
-(Data: Source, scraping method, cleaning, etc.) 
 
 We used two primary data sources for this work: 
 
@@ -60,9 +51,38 @@ We used two primary data sources for this work:
 CitiBike ridership data are readily available through a [public website](https://ride.citibikenyc.com/system-data). These data include CitiBike rides by month with descriptive information including: start and end stations, latitude and longitude of those stations, trip duration, and sex, birth year, and membership status of rider. 
 
 The first challenge we encountered was the sheer volume of data – some months had nearly 250,000 rides across 24 csv files. We downloaded the 24 month-based ridership files, pulled the names of those files into a list, and then wrote and ran a function to read the csv files into R and conduct the following data cleaning steps:
+```{r, eval = FALSE}
+file_names <- list.files(path = "./data")
+manhattan_stations <- read_csv("manhattan_stations.csv")
 
-*Do we want to include this code but not run it*
+find_manhattan_rides <- function(data_name) {
+  
+  set.seed(8105)
+  
+  bike_rides_df <-
+    read_csv(str_c("./data/", data_name)) %>% 
+    janitor::clean_names() %>%
+    filter(gender != 0, 
+           year(starttime) - birth_year >= 18,
+           year(starttime) - birth_year <= 85, 
+           !(start_station_id == end_station_id & tripduration < 180)
+    ) %>% 
+    mutate(
+      start_station_id = as.numeric(start_station_id), 
+      end_station_id = as.numeric(end_station_id)
+    ) %>% 
+    filter(
+      start_station_id %in% pull(manhattan_stations, id), 
+      end_station_id %in% pull(manhattan_stations, id)
+    ) %>% 
+    sample_frac(.01)
+  
+  return(bike_rides_df)
+    
+}
 
+manhattan_rides_df <- map_df(file_names, find_manhattan_rides)
+```
 *   include only rides that **start and end at stations in Manhattan** (identified using a separate csv file, which listed all Manhattan states `manhattan_stations.csv`)
 *   keep rides that were **at least 3 minutes in duration** 
 *   **delete rides with missing or placeholder values** for any variable (i.e., gender = 0),
@@ -70,14 +90,35 @@ The first challenge we encountered was the sheer volume of data – some months 
 *   take a **random sample of 1% of rides from each month** to ensure reasonable computing time. 
 
 After obtaining the sample data above, we created the following variables, and the resulting datafile `manhattan_rides_df`: 
-
+```{r, tidy manhattan rides data, eval = FALSE}
+manhattan_rides_df <-
+  manhattan_rides_df %>% 
+  mutate(
+    gender = ifelse(gender == 1, "male", "female") %>% 
+      factor(levels = c("male", "female")),
+    trip_min = tripduration/60, 
+    day_of_week = wday(starttime, label = TRUE),
+    start_date = format(starttime, format = "%m-%d"), 
+    stop_date = format(stoptime, format = "%m-%d"), 
+    year = as.factor(year(starttime)), 
+    age = ifelse(year == 2019, 2019 - birth_year, 2020 - birth_year), 
+    age_group = cut(age, 
+                    breaks = c(-Inf, 25, 35, 45, 55, 65, 85), 
+                    labels = c("18-25","26-35", "36-45", "46-55", "56-65", "66-85"))
+  )
+```
 *   `trip_min`: Trip duration in minutes, rather than seconds
 *   `day_of_week`: Day of the week when the trip started
 *   `start_date`: Date when the trip started, excluding year 
-*   `stop_date: Date when the trip ended, excluding year
+*   `stop_date`: Date when the trip ended, excluding year
 *   `year`: Year when trip took place
 *   `age`: Age of rider during the ride subtracting birthyear from year of ride
 *   `age_group`: Categorical variable identifying age group or rider (18-25, 26-35, 36-45, 46-55, 56-65, or 66-85)
+
+We then wrote this to a csv. 
+```{r, write all manhattan rides to a df, eval = FALSE}
+write_csv(manhattan_rides_df, "manhattan_rides.csv")
+```
 
 ### **MTA Data**
 
@@ -88,7 +129,40 @@ We used two MTA datasets:
 ### Turnstile data
 
 Subway turnstiles data from [2019](https://data.ny.gov/Transportation/Turnstile-Usage-Data-2019/xfn5-qji9) and [2020](https://data.ny.gov/Transportation/Turnstile-Usage-Data-2020/py8k-a8wg) were downloaded. These datasets included information about the number of entries and exits from a given turnstile across all subway stations. We filtered to only Manhattan stations and converted latitude and longitude of stations to numeric variables, creating the `turnstiles_2019_m` and `turnstiles_2020_m` datsets. We then merged those dataset, resulting in the datafile `turnstiles_19_20_m`, which includes 12 variables, some of which are listed below: 
+```{r, turnstile data cleaning, eval = FALSE}
+### loading 2019 data
+turnstiles_data_2019 = read_csv("./data/2019-turnstile.csv") %>% 
+  mutate(gtfs_latitude = as.numeric(gtfs_latitude),
+         gtfs_longitude = as.numeric(gtfs_longitude),
+         borough = recode(borough, Q = "Queens", Bk = "Brooklyn", Bx = "Bronx", M = "Manhattan", SI = "Staten Island"),
+         month = format(as.Date(date), "%m"),
+         day_month = format(date, "%m/%d")) %>% 
+  drop_na()
 
+### calculating each stop's monthly average rates in 2019 (pre pandemic)
+turnstiles_data_2019_averages = 
+  turnstiles_data_2019 %>% 
+  group_by(month, complex_id) %>% 
+  summarise(avg_exits = mean(exits),
+            avg_entries = mean(entries))
+
+### loading 2020 data 
+turnstiles_data_2020 = read_csv("./data/2020-turnstile.csv") %>% 
+  mutate(gtfs_latitude = as.numeric(gtfs_latitude),
+         gtfs_longitude = as.numeric(gtfs_longitude),
+         month = format(as.Date(date), "%m"),
+         borough = recode(borough, Q = "Queens", Bk = "Brooklyn", Bx = "Bronx", M = "Manhattan", SI = "Staten Island"),
+         day_month = format(date, "%m/%d")) %>% 
+  drop_na()
+
+### merging 2020 data with the monthly average turnstile usage for 2019 - pre pandemic 
+total = merge(turnstiles_data_2020, turnstiles_data_2019_averages, by = c("complex_id", "month")) %>% 
+  mutate(entries_pc = (((entries-avg_entries)/avg_entries)*100),
+         exits_pc = (((exits-avg_exits)/avg_exits)*100)) %>% 
+  mutate(entries_pc = ifelse(entries_pc>100, 100, entries_pc),
+         exits_pc = ifelse(exits_pc>100, 100, exits_pc)) %>% 
+  select(-c(day_month, avg_entries, avg_exits, entries, exits, month))
+```
 *   `stop_name`: Station name
 *   `daytime_routes`: Subway lines 
 *   `entries`: Number of entries at a given turnstile 
@@ -97,9 +171,54 @@ Subway turnstiles data from [2019](https://data.ny.gov/Transportation/Turnstile-
 ### Percent Change data
 
 Additionally, we downloaded [COVID MTA ridership data](https://new.mta.info/coronavirus/ridership), which details the percent change in MTA ridership during COVID by transportation type. 
+```{r input citibike membership data, eval = FALSE}
+membership_df = 
+  read_csv("ridership.csv") %>%
+  mutate(date = factor(date, ordered = TRUE, levels = c("01/2019", "02/2019", "03/2019", "04/2019",
+                                                         "05/2019", "06/2019", "07/2019", "08/2019",
+                                                         "09/2019", "10/2019", "11/2019", "12/2019",
+                                                         "01/2020", "02/2020", "03/2020", "04/2020",
+                                                         "05/2020", "06/2020", "07/2020", "08/2020",
+                                                         "09/2020", "10/2020", "11/2020", "12/2020",
+                                                         "01/2021", "02/2021", "03/2021", "04/2021",
+                                                         "05/2021", "06/2021", "07/2021", "08/2021",
+                                                         "09/2021", "10/2021"))) %>%
+  rename(ct_annual_members = annual_members) %>%
+  rename(ct_single_trip_passes = single_trip_passes) %>%
+  rename(ct_single_day_passes = single_day_passes) %>%
+  rename(ct_three_day_passes = three_day_passes) %>%
+  rename(ct_total_annual_members = total_annual_members) %>%
+  mutate(date = as.yearmon(date, "%m/%Y")) %>%
+  mutate(date = as.jul(date)) %>%
+  mutate(date = as.Date(date)) %>%
+  pivot_longer(
+    cols = starts_with("ct"),
+    names_to = "measure",
+    values_to = "count"
+  ) 
 
+
+measures_of_interest =
+  membership_df %>%
+  filter(measure %in% c("ct_annual_members","ct_single_day_passes","ct_single_trip_passes"))
+```
 After importing and cleaning, the resulting datafile, `ridership_covid_pc_tidy`, includes the following variables: 
-
+```{r, percent change dataset, eval = FALSE}
+citi_pc_change = 
+  manhattan_rides_df %>% 
+  mutate(date = format(stoptime, format = "%m-%d-%Y")) %>% 
+  group_by(stop_date, year) %>% 
+  summarize(daily_rides = n()) %>% 
+  ungroup() %>% 
+  group_by(stop_date) %>% 
+  arrange(year, .by_group = T) %>% 
+  mutate(percent_change = (daily_rides/lag(daily_rides) - 1) * 100) %>%
+  filter(year == 2020) %>% 
+  select(date = stop_date, percent_change) %>% 
+  mutate(transit_system = "citi_bike",
+         date = paste0("2020-", date),
+         date = as.Date(date, "%Y-%m-%d"))
+```
 *   `date`: Date
 *   `transit_system`: Mode of transportation (Access a Ride, Bridges and Tunnels, Buses, LIRR, Metro North, or Subways) 
 *   `percent_change`: Percent change in rides from the year prior 
@@ -112,18 +231,127 @@ As outlined above, we had several categories of questions to explore and an even
 
 ### Descriptive Statistics: 
 
-**Ridership by date**: We started the exploratory analysis by confirming our hypotheses: Did ridership go down during the initial months of COVID-19 lockdown? Generally, do we see more ridership during the week in 2019 relative to 2020 (i.e., work commuters)? These hypotheses were examined and confirmed. 
-*Inlcude code?*
+**Ridership by date**: We started the exploratory analysis by confirming our hypotheses: Did ridership go down during the initial months of COVID-19 lockdown? This hypothesis was examined and confirmed. 
+```{r, Rides per day summary, eval = FALSE}
+manhattan_rides_df %>% 
+  group_by(start_date, year) %>% 
+  summarize(obs = n()) %>% 
+  ggplot(aes(x = start_date, y = obs, group = year, color = year)) +
+  geom_line() + 
+  geom_smooth(se = FALSE) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, color = rep(c("black", rep("transparent", each = 10)), 365)))
+```
+**Average ride length by month**: We then looked at trip duration by month, assuming that longer trips typically occur in warmed months and shorter trips take place during the cooler months. Upon initial examination of trip duration data, we found many outliers, namely trips of over 1,000,000 seconds. We assumed that these trips included people who did not properly dock the bikes at the end station, some who stole bikes or took them home for convenient use in the future, or similar situations. We filtered out these outliers using the IQR method and then examined trip duration using boxplots. We actually found that trip during was relatively stable in 2019, but increased in March 2020. This is likely because as people were less comfortable using the subway during COVID, they turned to longer CitiBike rides. 
+```{r, average ride length per month, eval = FALSE}
+monthly_Q1 <- quantile(pull(manhattan_rides_df, trip_min), probs = 0.25)
+monthly_Q3 <- quantile(pull(manhattan_rides_df, trip_min), probs = 0.75)
+monthly_inter_quart <- IQR(pull(manhattan_rides_df, trip_min))
 
-**Trip duration by month**: We then looked at trip duration by month, assuming that longer trips typically occur in warmed months and shorter trips take place during the cooler months. We actually found that trip during was relatively stable in 2019, but increased in April 2020. This is likely because as people were less comfortable using the subway during COVID, they turned to longer CitiBike rides. 
+monthly_rides_df <-
+  manhattan_rides_df %>% 
+    filter(
+      trip_min >= monthly_Q1 - 1.5*monthly_inter_quart, 
+      trip_min <= monthly_Q3 + 1.5*monthly_inter_quart
+    )
 
-**Number of rides per month**: We also found that the number of rides dropped meaningfully when the stay-at-home orders were in place in New York. Folks didn't use CitiBikes as much when there was nowhere they could go! 
-
-*Check consistency in this vs the one before*
-
-**Trip duration by age and sex**: Then, we examined demographic information such as age and sex by trip duration. Upon initial examination of trip duration data, we found many outliers, namely trips of over 1,000,000 seconds. We assumed that these trips included people who did not properly dock the bikes at the end station, some who stole bikes or took them home for convenient use in the future, or similar situations. We filtered out these outliers using the IQR method and then examined trip duration using boxplots. Specifically, we generated boxplots of trip duration in minutes by gender and age group. Then, we plotted the average age of riders per month by gender. 
+monthly_rides_df %>% 
+  group_by(year) %>% 
+  mutate(
+    month = month(starttime, label = T)
+  ) %>% 
+  plot_ly(
+    x = ~month, 
+    y = ~trip_min,
+    color = ~year,
+    type = "box",
+    colors = "viridis") %>% 
+  layout(
+    boxmode = "group",
+    title = "Duration of Citibike Rides by Month",
+    xaxis = list(title = "Month"),
+    yaxis = list(title = "Trip Duration in Minutes")
+    )
+```
+**Number of rides per month**: We also found that the number of rides dropped meaningfully when the stay-at-home orders were in place in New York in March and April. Folks didn't use CitiBikes as much when there was nowhere they could go! 
+```{r, number of rides per month, eval = FALSE}
+manhattan_rides_df %>% 
+  group_by(year) %>% 
+  mutate(
+    month = month(starttime, label = T)
+  ) %>% 
+  group_by(year, month) %>% 
+  summarise(obs = n()) %>% 
+  plot_ly(
+    x = ~month, 
+    y = ~obs, 
+    color = ~year,
+    type = "scatter",
+    mode = "lines",
+    colors = "viridis") %>%  
+  layout(
+    title = "Number of Citibike Rides per Month",
+    xaxis = list(title = "Month"),
+    yaxis = list(title = "Rides")
+  )
+```
+**Trip duration by age and sex**: Then, we examined demographic information such as age and sex by trip duration. Specifically, we generated boxplots of trip duration in minutes by gender and age group. Then, we plotted the average age of riders per month by gender. 
+```{r, trip_min by age_group and gender, eval = FALSE}
+#this generates a plot of boxplots of trip duration (minutes) by gender and age_group
+trip_dur_age_gender_df %>% 
+  mutate(
+    gender = str_to_sentence(gender)
+  ) %>% 
+  plot_ly(x = ~age_group, y = ~trip_min, color = ~gender, type = "box", colors = "viridis") %>%  
+  layout(
+    boxmode = "group",
+    xaxis = list(title = "Age Range"), 
+    yaxis = list(title = "Trip Duration (min)"), 
+    legend = list(title = list(text = "<b> Gender </b>"))
+  )
+```
 
 **Average age per day by gender**: We also looked at the average age per day by gender. Generally, male riders tended to be older throughout the year. 
+```{r, average age per day by gender, eval = FALSE}
+# this dataframe groups rides by gender and month
+# and provides the average age for each gender in that month
+# along with the standard deviation, standard error, lower bound, and upper bound
+# which are then used to create a plotly graph where we get average age per month for each gender
+# with 95% confidence bands around each line
+avg_age_per_month_df <-
+  read_csv("manhattan_rides.csv") %>% 
+  mutate(
+    date = floor_date(as_date(starttime), "month")
+  ) %>% 
+  select(date, gender, age) %>% 
+  group_by(date, gender) %>% 
+  summarize(
+    total = n(),
+    avg_age = mean(age),
+    sd_age = sd(age)
+  ) %>% 
+  mutate(
+    sem = sd_age/sqrt(total - 1), 
+    lower_bound = avg_age + qt(0.025, df = total - 1) * sem, 
+    upper_bound = avg_age - qt(0.025, df = total - 1) * sem
+  ) %>% 
+  ungroup()
+
+avg_age_plot <-
+  avg_age_per_month_df %>% 
+  mutate(
+    gender = str_to_sentence(gender)
+  ) %>% 
+  ggplot(aes(x = date, y = avg_age, color = gender)) +
+  geom_line(size = 1, alpha = 0.8) +
+  geom_ribbon(aes(ymin = lower_bound, ymax = upper_bound), alpha = 0.2)
+
+ggplotly(avg_age_plot) %>% 
+  layout(
+    xaxis = list(title = "Date"), 
+    yaxis = list(title = "Age"), 
+    legend = list(title = list(text = "<b> Gender </b>"))
+  )
+```
 
 ### Travel Patterns 
 
