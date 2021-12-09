@@ -107,10 +107,15 @@ map_month_2019 =
   geom_point(data = hospitals_df, aes(x = Long, y = Lat), color = "red") + 
   geom_point(data = hubs_df, aes(x = Long, y = Lat), color = "green") +
   transition_time(month) +
-  labs(title = "2019 Month: {frame_time}", color = "Rides") +
+  labs(
+    title = "2019 Month: {frame_time}", 
+    color = "Rides",
+    x = "Longitude",
+    y = "Latitude") +
   enter_grow() +
   exit_shrink() +
-  ease_aes("sine-in-out")
+  ease_aes("sine-in-out") +
+  coord_cartesian(ylim = c(40.68, 40.85), xlim = c(-74.02, -73.925))
 
 
 map_month_2020 = 
@@ -121,10 +126,16 @@ map_month_2020 =
   geom_point(data = hospitals_df, aes(x = Long, y = Lat), color = "red") + 
   geom_point(data = hubs_df, aes(x = Long, y = Lat), color = "green") +
   transition_time(month) +
-  labs(title = "2020 Month: {frame_time}", color = "Rides") +
+  labs(
+    title = "2020 Month: {frame_time}", 
+    color = "Rides",
+    x = "Longitude",
+    y = "Latitude") +
+  theme(legend.position = "none") +
   enter_grow() +
   exit_shrink() +
-  ease_aes("sine-in-out")
+  ease_aes("sine-in-out") +
+  coord_cartesian(ylim = c(40.68, 40.85), xlim = c(-74.02, -73.925))
 
 #combining both animations using magick package
 a_month_gif = animate(map_month_2019, duration = 12, fps = 1, width = 400, height = 400)
@@ -183,7 +194,7 @@ daily_map_2019 =
   enter_grow() +
   exit_shrink() +
   ease_aes("sine-in-out") +
-  coord_cartesian(ylim = c(40.725, 40.825), xlim = c(-74.0125, -73.85))
+  coord_cartesian(ylim = c(40.725, 40.775), xlim = c(-74.0125, -73.925))
 
 daily_map_2020 = 
   ggplot() +
@@ -203,7 +214,7 @@ scale_fill_continuous(limits = c(0,12.5), breaks = c(0, 2.5, 5.0, 7.5, 10.0, 12.
   enter_grow() +
   exit_shrink() +
   ease_aes("sine-in-out") +
-  coord_cartesian(ylim = c(40.725, 40.825), xlim = c(-74.0125, -73.85))
+  coord_cartesian(ylim = c(40.725, 40.775), xlim = c(-74.0125, -73.925))
 
 #combining both animations using magick package
 a_daily_gif = animate(daily_map_2019, duration = 30, fps = 2, width = 400, height = 400)

@@ -34,7 +34,6 @@ manhattan_rides_df <-
 ## CitiBike Rides over the year 
 
 Overall and as expected, there were more CitiBike rides in 2019 beginning in the peak months of the pandemic in 2020. 
-*FIX AXIS* 
 
 ```{r, Rides per day summary}
 manhattan_rides_df %>% 
@@ -42,23 +41,35 @@ manhattan_rides_df %>%
   summarize(obs = n()) %>% 
   ggplot(aes(x = start_date, y = obs, group = year, color = year)) +
   geom_line() + 
-  geom_smooth(se = FALSE) 
+  geom_smooth(se = FALSE) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, color = rep(c("black", rep("transparent", each = 10)), 365)))
 ```
 
 ## Average Ride length per month
 
 ```{r, average ride length per month}
-manhattan_rides_df %>% 
+monthly_Q1 <- quantile(pull(manhattan_rides_df, trip_min), probs = 0.25)
+monthly_Q3 <- quantile(pull(manhattan_rides_df, trip_min), probs = 0.75)
+monthly_inter_quart <- IQR(pull(manhattan_rides_df, trip_min))
+
+monthly_rides_df <-
+  manhattan_rides_df %>% 
+    filter(
+      trip_min >= monthly_Q1 - 1.5*monthly_inter_quart, 
+      trip_min <= monthly_Q3 + 1.5*monthly_inter_quart
+    )
+
+monthly_rides_df %>% 
   group_by(year) %>% 
   mutate(
     month = month(starttime, label = T)
   ) %>% 
-  filter(tripduration < 2500) %>% 
   plot_ly(
     x = ~month, 
     y = ~trip_min,
     color = ~year,
-    type = "box") %>% 
+    type = "box",
+    colors = "viridis") %>% 
   layout(
     boxmode = "group",
     title = "Duration of Citibike Rides by Month",
@@ -84,7 +95,8 @@ manhattan_rides_df %>%
     y = ~obs, 
     color = ~year,
     type = "scatter",
-    mode = "lines") %>%  
+    mode = "lines",
+    colors = "viridis") %>%  
   layout(
     title = "Number of Citibike Rides per Month",
     xaxis = list(title = "Month"),

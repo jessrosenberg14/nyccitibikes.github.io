@@ -13,8 +13,8 @@
 
 <title>Travel Patterns</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -359,10 +359,15 @@ map_month_2019 =
   geom_point(data = hospitals_df, aes(x = Long, y = Lat), color = &quot;red&quot;) + 
   geom_point(data = hubs_df, aes(x = Long, y = Lat), color = &quot;green&quot;) +
   transition_time(month) +
-  labs(title = &quot;2019 Month: {frame_time}&quot;, color = &quot;Rides&quot;) +
+  labs(
+    title = &quot;2019 Month: {frame_time}&quot;, 
+    color = &quot;Rides&quot;,
+    x = &quot;Longitude&quot;,
+    y = &quot;Latitude&quot;) +
   enter_grow() +
   exit_shrink() +
-  ease_aes(&quot;sine-in-out&quot;)
+  ease_aes(&quot;sine-in-out&quot;) +
+  coord_cartesian(ylim = c(40.68, 40.85), xlim = c(-74.02, -73.925))
 
 
 map_month_2020 = 
@@ -373,10 +378,16 @@ map_month_2020 =
   geom_point(data = hospitals_df, aes(x = Long, y = Lat), color = &quot;red&quot;) + 
   geom_point(data = hubs_df, aes(x = Long, y = Lat), color = &quot;green&quot;) +
   transition_time(month) +
-  labs(title = &quot;2020 Month: {frame_time}&quot;, color = &quot;Rides&quot;) +
+  labs(
+    title = &quot;2020 Month: {frame_time}&quot;, 
+    color = &quot;Rides&quot;,
+    x = &quot;Longitude&quot;,
+    y = &quot;Latitude&quot;) +
+  theme(legend.position = &quot;none&quot;) +
   enter_grow() +
   exit_shrink() +
-  ease_aes(&quot;sine-in-out&quot;)
+  ease_aes(&quot;sine-in-out&quot;) +
+  coord_cartesian(ylim = c(40.68, 40.85), xlim = c(-74.02, -73.925))
 
 #combining both animations using magick package
 a_month_gif = animate(map_month_2019, duration = 12, fps = 1, width = 400, height = 400)
@@ -433,7 +444,7 @@ daily_map_2019 =
   enter_grow() +
   exit_shrink() +
   ease_aes(&quot;sine-in-out&quot;) +
-  coord_cartesian(ylim = c(40.725, 40.825), xlim = c(-74.0125, -73.85))
+  coord_cartesian(ylim = c(40.725, 40.775), xlim = c(-74.0125, -73.925))
 
 daily_map_2020 = 
   ggplot() +
@@ -453,7 +464,7 @@ scale_fill_continuous(limits = c(0,12.5), breaks = c(0, 2.5, 5.0, 7.5, 10.0, 12.
   enter_grow() +
   exit_shrink() +
   ease_aes(&quot;sine-in-out&quot;) +
-  coord_cartesian(ylim = c(40.725, 40.825), xlim = c(-74.0125, -73.85))
+  coord_cartesian(ylim = c(40.725, 40.775), xlim = c(-74.0125, -73.925))
 
 #combining both animations using magick package
 a_daily_gif = animate(daily_map_2019, duration = 30, fps = 2, width = 400, height = 400)
