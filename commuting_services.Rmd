@@ -71,9 +71,11 @@ measures_of_interest %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
+This animated graph displays changes in CitiBike annual passes, single-day passes and single-trip passes from January 2019 through November 2021 (when we last pulled these reports). As seen by this graph, spikes in memberhsip tend to occur in summer months. During the COVID-19 pandemic, there was a major spike in all forms
+of CitiBike memberships from April 2020 through August 2020 and this spike was most significant for single-trip purchases. Another even more significant spike occurred from May 2021 through August 2021. 
+
 ```{r, input manhattan rides data, message=FALSE}
 manhattan_rides_df <- read_csv("manhattan_rides.csv")
-
 manhattan_rides_df <-
   manhattan_rides_df %>% 
   mutate(
@@ -187,3 +189,5 @@ renamed_ridership %>%
     yaxis = list(title = "Percent Change")
   )
 ```
+
+This plot shows the percent change in ridership in 2020 compared to 2019 for various transit services across NYC. By this graph we can see that every transit service experienced a drop in ridership in March 2020 compared to 2019 levels, coinciding with the start of lockdown. However, Citi Bike usage recovered and in many cases exceeded its 2019 levels, while all other forms of transit stayed below the usage levels seen in 2019.
