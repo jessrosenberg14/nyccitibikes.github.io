@@ -23,6 +23,8 @@ library(timevis)
 * Rose Killian (rk3110)
 * Christie Zettler (cz2657)
 
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Citi_Bike_logo.svg/2560px-Citi_Bike_logo.svg.png){width=50%} 
+
 ## The motivation for this project
 During the height of the pandemic, Citi Bikes played an integral part in helping to transport critical workers around NYC. Many people in NYC also likely switched from riding the subway regularly to seeking alternative transportation methods. We are interested in understanding how transportation trends across NYC changed during the pandemic and since vaccinations became widely available in early 2021. 
 
