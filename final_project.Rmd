@@ -106,7 +106,6 @@ manhattan_rides_df %>%
 
 Huge drop in monthly trips in April 2020. Lockdown started mid/late March so this coincides with people transitioning to WFH and largely staying inside to minimize contacts. The ride numbers bounce back quite a bit after this but not to 2019 levels.
 
-
 ```{r, subset of manhattan rides data}
 # the code below saves trip_min, gender, age_group variables of manhattan_rides_df
 
