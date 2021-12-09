@@ -153,6 +153,8 @@ for (i in 2:12) {
 new_month_gif
 ```
 
+In mid-2020, Citi Bike expanded stops into northern Manhattan, driving the expansion of the bubble graph area seen in late-2020. 
+
 ```{r, zoomed daily map}
 bikes_2019 = manhattan_rides_df %>% 
   filter(year == "2019") %>% 

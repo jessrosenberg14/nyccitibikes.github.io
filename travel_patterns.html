@@ -13,8 +13,8 @@
 
 <title>Travel Patterns</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -243,7 +243,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Home</a>
+      <a class="navbar-brand" href="index.html">About Our Project</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -251,13 +251,7 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="about_us.html">About Our Project</a>
-</li>
-<li>
   <a href="Report.html">Final Project Report</a>
-</li>
-<li>
-  <a href="final_project_proposal.html">Project Proposal</a>
 </li>
 <li>
   <a href="final_project.html">Descriptive Statistics</a>
@@ -404,6 +398,7 @@ for (i in 2:12) {
 
 new_month_gif</code></pre>
 <p><img src="travel_patterns_files/figure-html/rides%20in%202019%20vs%202020%20by%20month-1.gif" /><!-- --></p>
+<p>In mid-2020, Citi Bike expanded stops into northern Manhattan, driving the expansion of the bubble graph area seen in late-2020.</p>
 <pre class="r"><code>bikes_2019 = manhattan_rides_df %&gt;% 
   filter(year == &quot;2019&quot;) %&gt;% 
     group_by(stop_date, end_station_longitude, end_station_latitude) %&gt;% 
