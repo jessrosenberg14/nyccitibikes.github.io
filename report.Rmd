@@ -137,10 +137,15 @@ Next, we looked at how travel patterns changed during the pandemic.
 
 **ADD info here** 
 
-**do we have additional analysis** 
+# Additional Analysis 
 
-•	Additional analysis: If you undertake formal statistical analyses, describe these in detail
-•	Discussion: What were your findings? Are they what you expect? What insights into the data can you make?
+We did not undertake any formal statistical analyses, as our research questions were descriptive in nature. 
+
+# Discussion 
+
+Generally, our findings were consistent with what we expected based on our experience during COVID-19. As more companies began working form home, we assumed that CitiBike (and MTA, for that matter) rides would decrease during the week and during the period of the year where stay-at-home measures were most stringent. Our data and visualizations confirmed this. Our exploratory analyses also co
+
+Discussion: What were your findings? Are they what you expect? What insights into the data can you make?
 
 
 
