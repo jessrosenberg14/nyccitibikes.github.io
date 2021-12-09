@@ -134,7 +134,7 @@ manhattan_rides_df %>%
 
 Huge drop in monthly trips in April 2020. Lockdown started mid/late March so this coincides with people transitioning to WFH and largely staying inside to minimize contacts. The ride numbers bounce back quite a bit after this but not to 2019 levels.
 
-```{r, percent change dataset}
+```{r, percent change dataset, message=FALSE, warning=F}
 citi_pc_change = 
   manhattan_rides_df %>% 
   mutate(date = format(stoptime, format = "%m-%d-%Y")) %>% 
@@ -151,9 +151,7 @@ citi_pc_change =
          date = as.Date(date, "%Y-%m-%d"))
 ```
 
-
-
-```{r, CitiBike ridership percent change plot}
+```{r, CitiBike ridership percent change plot, message=FALSE, warning=F}
 # Using ggplot
 post_covid_transit = citi_pc_change %>% 
   ungroup() %>% 
@@ -164,7 +162,7 @@ post_covid_transit = citi_pc_change %>%
 ggplotly(post_covid_transit)
 ```
 
-```{r, copied from subway_rides RMD}
+```{r, copied from subway_rides RMD, message=FALSE, warning=F}
 #Ridership data for 2019/2020 Manhattan
 turnstiles_2019_m = read_csv("2019-turnstile.csv") %>% 
   filter(borough == "M") %>% 
@@ -215,12 +213,12 @@ ridership_covid_pc_tidy =
           percent_change = as.numeric(percent_change))
 ```
 
-```{r, Join datasets}
+```{r, Join datasets, message=FALSE, warning=F}
 ridership_pc_change = 
   bind_rows(ridership_covid_pc_tidy, citi_pc_change)
 ```
 
-```{r, plot with everything}
+```{r, plot with everything, message=FALSE, warning=F}
 # Using ggplot
 post_covid_transit = ridership_pc_change %>% 
   ungroup() %>% 
