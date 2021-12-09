@@ -26,6 +26,8 @@ library(timevis)
 ## The motivation for this project
 During the height of the pandemic, Citi Bikes played an integral part in helping to transport critical workers around NYC. Many people in NYC also likely switched from riding the subway regularly to seeking alternative transportation methods. We are interested in understanding how transportation trends across NYC changed during the pandemic and since vaccinations became widely available in early 2021. 
 
+![](ezgif.com-gif-maker.gif)
+
 ## Timeline of COVID Events
 
 Our understanding of COVID-19 changed daily, if not hourly, at the beginning of the pandemic. The below timeline is helpful to remind ourselves of major events of 2020. 
