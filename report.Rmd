@@ -394,14 +394,181 @@ Next, we looked at how travel patterns changed during the pandemic.
 
 **Rides per day of week**: In 2019, we would assume that many rides occured during the week - going to and from the office. Our hypothesis was that the number of rides per day was higher in 2019 during the week than in 2020. It was true! Interestingly, there were slightly more rides on the weekends in 2020, likely because of a predisposition to use biking as a mode of transportation, rather than subways, during COVID-19. 
 
-**ADD IN INFO ON ROSE'S THINGS** 
+**Monthly destinations in 2019 vs. 2020**: We then examined ending stations across Manhatann in 2019 vs. 2020. We found that CitiBike opened more stations in Northern Manhattan in 2020, leading to an increase in rides uptown. Finally, we see that 2020 started off with more rides, but then we see that ridership plummets in March before recovering slightly. 
+
+```{r, rides in 2019 vs 2020 by month, eval = FALSE}
+nyc = 
+  as_tibble(
+    map_data("state")
+  ) %>% 
+  filter(subregion == "manhattan")
+
+bikes_month_2019 = manhattan_rides_df %>% 
+  filter(year == "2019") %>% 
+  mutate(
+    month = format(starttime, format = "%m"),
+    month = as.numeric(month)
+  ) %>% 
+  group_by(month, end_station_longitude, end_station_latitude) %>% 
+  summarise(n_rides = n())
+
+bikes_month_2020 = manhattan_rides_df %>%
+  filter(year == "2020") %>% 
+  mutate(
+    month = format(starttime, format = "%m"),
+    month = as.numeric(month)
+  ) %>%
+  group_by(month, end_station_longitude, end_station_latitude) %>% 
+  summarise(n_rides = n())
+
+map_month_2019 = 
+  ggplot() +
+  geom_polygon(data = nyc, aes(x = long, y = lat, group = group), fill = "grey", alpha = 0.5) +
+  geom_point(data = bikes_month_2019, aes(x = end_station_longitude, y = end_station_latitude, size = 0.25, color = n_rides), alpha = 0.5) +
+  scale_size(range = c(1,8), name = "Rides") +
+  geom_point(data = hospitals_df, aes(x = Long, y = Lat), color = "red") + 
+  geom_point(data = hubs_df, aes(x = Long, y = Lat), color = "green") +
+  transition_time(month) +
+  labs(
+    title = "2019 Month: {frame_time}", 
+    color = "Rides",
+    x = "Longitude",
+    y = "Latitude") +
+  enter_grow() +
+  exit_shrink() +
+  ease_aes("sine-in-out") +
+  coord_cartesian(ylim = c(40.68, 40.85), xlim = c(-74.02, -73.925))
+
+
+map_month_2020 = 
+  ggplot() +
+  geom_polygon(data = nyc, aes(x = long, y = lat, group = group), fill = "grey", alpha = 0.5) +
+  geom_point(data = bikes_month_2020, aes(x = end_station_longitude, y = end_station_latitude, size = 0.25, color = n_rides), alpha = 0.5) +
+  scale_size(range = c(1,8), name = "Rides") +
+  geom_point(data = hospitals_df, aes(x = Long, y = Lat), color = "red") + 
+  geom_point(data = hubs_df, aes(x = Long, y = Lat), color = "green") +
+  transition_time(month) +
+  labs(
+    title = "2020 Month: {frame_time}", 
+    color = "Rides",
+    x = "Longitude",
+    y = "Latitude") +
+  theme(legend.position = "none") +
+  enter_grow() +
+  exit_shrink() +
+  ease_aes("sine-in-out") +
+  coord_cartesian(ylim = c(40.68, 40.85), xlim = c(-74.02, -73.925))
+
+#combining both animations using magick package
+a_month_gif = animate(map_month_2019, duration = 12, fps = 1, width = 400, height = 400)
+b_month_gif = animate(map_month_2020, duration = 12, fps = 1, width = 400, height = 400)
+
+a_month_mgif = image_read(a_month_gif)
+b_month_mgif = image_read(b_month_gif)
+
+new_month_gif = image_append(c(a_month_mgif[1], b_month_mgif[1]))
+for (i in 2:12) {
+  combined_month = image_append(c(a_month_mgif[i], b_month_mgif[i]))
+  new_month_gif = c(new_month_gif, combined_month)
+}
+
+new_month_gif
+```
+
+**Daily destinations in 2019 and 2020 in lower Manhattan**: We then wanted to examine destinations specifically in lower Manhattan near hospitals. An interesting finding was that even when ridership drops in 2020, we see that common destinations continue to be near hospitals and other healthcare hubs. 
+
+```{r, zoomed daily map, eval = FALSE}
+bikes_2019 = manhattan_rides_df %>% 
+  filter(year == "2019") %>% 
+    group_by(stop_date, end_station_longitude, end_station_latitude) %>% 
+  summarise(n_rides = n()) %>% 
+  mutate(
+    date = paste0("2019-", stop_date),
+         date = as.Date(date, "%Y-%m-%d"))
+
+bikes_2020 = manhattan_rides_df %>%
+  filter(year == "2020") %>% 
+    group_by(stop_date, end_station_longitude, end_station_latitude) %>% 
+  summarise(n_rides = n()) %>% 
+  mutate(
+    date = paste0("2020-", stop_date),
+         date = as.Date(date, "%Y-%m-%d"))
+
+timeline_2019 = 
+  bikes_2019 %>% 
+  filter(date >= as.Date("2019-02-16"), date <= as.Date("2019-06-30"))
+
+timeline_2020 = 
+  bikes_2020 %>% 
+  filter(date >= as.Date("2020-02-16"), date <= as.Date("2020-06-30"))
+
+daily_map_2019 = 
+  ggplot() +
+  geom_polygon(data = nyc, aes(x = long, y = lat, group = group), fill = "grey", alpha = 0.5) +
+  geom_point(data = timeline_2019, aes(x = end_station_longitude, y = end_station_latitude, size = 0.25, color = n_rides), alpha = 0.5) +
+  geom_point(data = hospitals_df, aes(x = Long, y = Lat), color = "red") + 
+  geom_point(data = hubs_df, aes(x = Long, y = Lat), color = "green") +
+  transition_time(date) +
+  labs(
+    title = "Date: {frame_time}", 
+    color = "Rides",
+    x = "Longitude",
+    y = "Latitude") +
+  scale_fill_continuous(breaks = c(2.5, 5.0, 7.5, 10.0, 12.5)) +
+  enter_grow() +
+  exit_shrink() +
+  ease_aes("sine-in-out") +
+  coord_cartesian(ylim = c(40.725, 40.775), xlim = c(-74.0125, -73.925))
+
+daily_map_2020 = 
+  ggplot() +
+  geom_polygon(data = nyc, aes(x = long, y = lat, group = group), fill = "grey", alpha = 0.5) +
+  geom_point(data = timeline_2020, aes(x = end_station_longitude, y = end_station_latitude, size = 0.25, color = n_rides), alpha = 0.5) +
+scale_fill_continuous(limits = c(0,12.5), breaks = c(0, 2.5, 5.0, 7.5, 10.0, 12.5)) +
+  geom_point(data = hospitals_df, aes(x = Long, y = Lat), color = "red") + 
+  geom_point(data = hubs_df, aes(x = Long, y = Lat), color = "green") +
+  transition_time(date) +
+  labs(
+    title = "Date: {frame_time}", 
+    color = "Rides",
+    x = "Longitude",
+    y = "Latitude"
+    ) +
+  theme(legend.position = "none") +
+  enter_grow() +
+  exit_shrink() +
+  ease_aes("sine-in-out") +
+  coord_cartesian(ylim = c(40.725, 40.775), xlim = c(-74.0125, -73.925))
+
+#combining both animations using magick package
+a_daily_gif = animate(daily_map_2019, duration = 30, fps = 2, width = 400, height = 400)
+b_daily_gif = animate(daily_map_2020, duration = 30, fps = 2, width = 400, height = 400)
+
+#combining both animations using magick package
+a_daily_gif = animate(daily_map_2019, duration = 30, fps = 2, width = 400, height = 400)
+b_daily_gif = animate(daily_map_2020, duration = 30, fps = 2, width = 400, height = 400)
+
+a_daily_mgif = image_read(a_daily_gif)
+b_daily_mgif = image_read(b_daily_gif)
+
+new_daily_gif = image_append(c(a_daily_mgif[1], b_daily_mgif[1]))
+for (i in 2:60) {
+  combined_daily = image_append(c(a_daily_mgif[i], b_daily_mgif[i]))
+  new_daily_gif = c(new_daily_gif, combined_daily)
+}
+
+new_daily_gif
+```
+
+**Common Rides to Manhattan Locations**: We were interested in common travel patterns around Manhattan from 2019-2020. To do this, we selected 16 locations from around Manhattan and found the nearest Citi Bike station to that location. Then, we summarized the data to find the number of trips that start at one station and then end at the stations closest to the Manhattan locations. Next, we filtered the data to show only the most common trip that end at each of the 16 Citi Bike stations for our 16 locations (in the event of a tie, we select the start station that’s furthest away from the end station of interest). Then, we also determined the average age of a rider ending their trips at those 16 destinations.
+
+We created a shiny app to visualize the journeys to various Manhattan locations, which you can view [here] (https://mtr2143.shinyapps.io/shiny_end_stations/). Please look at our [Travel Patterns](travel_patterns.html) page to learn how to interact with our shiny app. 
 
 ### Commuting Services 
 
 In this part of our analysis, we wanted to examine CitiBike usage by itself and relative to other commuting services (i.e., MTA). 
 
 **CitiBike Memberships Purchased by Month in NYC and New Jersey City**: This animated graph demonstrates the growth of single day passes in the summer of 2020 and 2021 relative 2019. 
-
 ```{r animated graph, eval = FALSE}
 measures_of_interest %>%
   ggplot(aes(x = date, y = count)) +
@@ -423,6 +590,38 @@ measures_of_interest %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
+**Ridership Transit System Percent Change Following COVID**: We then wanted to examine how ridership of all commuting services changed from 2019 compared to 2020. We found that every transit service experienced a drop in ridership in March 2020 compared to 2019 levels, coinciding with the start of lockdown. However, CitiBike usage recovered and in many cases exceeded its 2019 levels, while all other forms of transit stayed below the usage levels seen in 2019.
+```{r, plot with everything, message=FALSE, warning=F}
+renamed_ridership = 
+  ridership_pc_change %>%
+    mutate(transit_system = factor(transit_system, levels = c("access_a_ride", "bridges_and_tunnels",
+                                                              "buses", "citi_bike", "lirr", "metro_north",
+                                                              "subways"), 
+                                   labels = c("Access a Ride", "Bridges and Tunnels", "Buses",
+                                              "Citi Bike", "Long Island Railroad", "Metro North",
+                                              "Subways")))
+      
+
+# Using plotly 
+renamed_ridership %>% 
+  ungroup() %>% 
+  drop_na() %>% 
+  filter(date >= as.Date('2020-03-01')) %>% 
+  plot_ly(
+    x = ~date, 
+    y = ~percent_change, 
+    color = ~transit_system,
+    type = "scatter",
+    mode = "lines") %>% 
+  layout(
+    title = "Ridership Transit System Percent Change Following COVID",
+    xaxis = list(title = "Date"),
+    yaxis = list(title = "Percent Change")
+  )
+```
+
+
+
 # Additional Analysis 
 
 We did not undertake any formal statistical analyses, as our research questions were descriptive in nature. 
@@ -431,7 +630,6 @@ We did not undertake any formal statistical analyses, as our research questions 
 
 Generally, our findings were consistent with what we expected based on our experience during COVID-19. As more companies began working form home, we assumed that CitiBike (and MTA, for that matter) rides would decrease during the week and during the period of the year where stay-at-home measures were most stringent. Our data and visualizations confirmed this. Our exploratory analyses also co
 
-Discussion: What were your findings? Are they what you expect? What insights into the data can you make?
 
 
 
