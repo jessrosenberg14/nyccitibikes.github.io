@@ -11,7 +11,7 @@ navbar:
       href: travel_patterns.html  
     - text: "Commuting Services"
       href: commuting_services.html  
-    - text: "CitiBike Destinations Shiny App"
+    - text: "CitiBike Shiny App"
       href: https://mtr2143.shinyapps.io/shiny_end_stations/ 
     - text: "Subway Shiny App"
       href: https://zoeverzani.shinyapps.io/subway_ridership/

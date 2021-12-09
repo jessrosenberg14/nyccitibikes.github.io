@@ -13,9 +13,6 @@ library(tidyverse)
 library(timevis)
 ```
 
-## Screencast 
-*Insert Screencast here*
-
 ## Group members 
 * Jess Rosenberg (jdr2191)
 * Zoe Verzani (zv2138)

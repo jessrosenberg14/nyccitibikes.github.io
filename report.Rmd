@@ -616,7 +616,7 @@ renamed_ridership %>%
 
 **Shiny App: Subway Ridership Percent Change from 2019 to 2020**: Finally, we wanted to examine how subway ridership changes across locations between 2019 and 2020. Specifically, we looked at entry and exit data from Subway turnstiles to understand where people are going to and coming from throughout the year. 
 
-We created a shiny app to visualize the percent change in subway ridership to various NYC locations across the 5 boroughs, which you can view [here] (https://zoeverzani.shinyapps.io/subway_ridership/). Please look at our [Commuting Services](commuting_services.html) page to learn how to interact with our shiny app. 
+We created a shiny app to visualize the percent change in subway ridership to various NYC locations across the 5 boroughs, which you can view [here](https://zoeverzani.shinyapps.io/subway_ridership/). Please look at our [Commuting Services](commuting_services.html) page to learn how to interact with our shiny app. 
 
 # Additional Analysis 
 
