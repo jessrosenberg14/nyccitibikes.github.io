@@ -198,6 +198,8 @@ This plot shows the percent change in ridership in 2020 compared to 2019 for var
 
 ## Shiny App: Subway Ridership Percent Change from 2019 to 2020 
 
+*FIX THIS WITH ZOE'S DESCRIPTION*
+
 We created a shiny app to visualize subway ridership change from 2019 to 2020, which you can view [here] (https://zoeverzani.shinyapps.io/subway_ridership/). 
 
 To interact with this app:
