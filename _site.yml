@@ -1,10 +1,8 @@
 name: "Final Project Website"
 output_dir: "."
 navbar:
-  title: "Home"
+  title: "About Our Project"
   right:
-    - text: "About Our Project"
-      href: about_us.html
     - text: "Final Project Report"
       href: Report.html
     - text: "Descriptive Statistics"

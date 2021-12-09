@@ -11,10 +11,10 @@
 
 
 
-<title>Final Project</title>
+<title>About Our Project</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -29,10 +29,18 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/vis-4.16.1/vis.min.css" rel="stylesheet" />
+<script src="site_libs/vis-4.16.1/vis.min.js"></script>
+<link href="site_libs/timeline-0.4/timevis.css" rel="stylesheet" />
+<script src="site_libs/timevis-binding-1.0.0/timevis.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -224,6 +232,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -231,6 +302,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -255,9 +336,6 @@ $(document).ready(function () {
 </li>
 <li>
   <a href="Report.html">Final Project Report</a>
-</li>
-<li>
-  <a href="final_project_proposal.html">Project Proposal</a>
 </li>
 <li>
   <a href="final_project.html">Descriptive Statistics</a>
@@ -294,15 +372,82 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Final Project</h1>
+<h1 class="title toc-ignore">About Our Project</h1>
 
 </div>
 
 
+<div id="screencast" class="section level2">
+<h2>Screencast</h2>
+<p><em>Insert Screencast here</em></p>
+</div>
+<div id="group-members" class="section level2">
+<h2>Group members</h2>
+<ul>
+<li>Jess Rosenberg (jdr2191)</li>
+<li>Zoe Verzani (zv2138)</li>
+<li>Matthew Russell (mtr2143)</li>
+<li>Rose Killian (rk3110)</li>
+<li>Christie Zettler (cz2657)</li>
+</ul>
+</div>
+<div id="the-motivation-for-this-project" class="section level2">
+<h2>The motivation for this project</h2>
+<p>During the height of the pandemic, Citi Bikes played an integral part in helping to transport critical workers around NYC. Many people in NYC also likely switched from riding the subway regularly to seeking alternative transportation methods. We are interested in understanding how transportation trends across NYC changed during the pandemic and since vaccinations became widely available in early 2021.</p>
+<p><img src="ezgif.com-gif-maker.gif" /></p>
+</div>
+<div id="timeline-of-covid-events" class="section level2">
+<h2>Timeline of COVID Events</h2>
+<p>Our understanding of COVID-19 changed daily, if not hourly, at the beginning of the pandemic. The below timeline is helpful to remind ourselves of major events of 2020.</p>
+<pre class="r"><code>timeline &lt;- data.frame(
+  id      = 1:11,
+  content = c(&quot;First COVID Case in NYC&quot;, 
+              &quot;NYC issues guidelines to avoid densely packed buses, subways, or trains&quot;,
+              &quot;NYC Public Schools Close&quot;, 
+              &quot;NYC Bars and Restaurants Close for In-Person Dining&quot;,
+              &quot;Governor Cuomo announces NYC subway closures from 1 am to 5 am&quot;, 
+              &quot;NYC Begins Phase 1 Re-Opening&quot;, &quot;NYC Begins Phase 2 Re-Opening&quot;,
+              &quot;NYC Begins Phase 3 of Re-Opening (without indoor dining)&quot;,
+              &quot;NYC Begins Phase 4 of Re-Opening (excluding malls, museums, and indoor dining/bars)&quot;,
+              &quot;Elementary Students Return to Public School Classrooms across NYC&quot;,
+              &quot;NYC Schools Switch to Fully Remote&quot;),
+  start   = c(&quot;2020-03-01&quot;, &quot;2020-03-08&quot;, &quot;2020-03-16&quot;, &quot;2020-03-17&quot;, &quot;2020-04-30&quot;,
+              &quot;2020-06-08&quot;, &quot;2020-06-022&quot;, &quot;2020-07-06&quot;, &quot;2020-07-19&quot;, &quot;2020-09-29&quot;, &quot;2020-11-19&quot;),
+  end     = c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
+  style = c(&quot;border-color: black; background: #EB4646;&quot;, 
+            &quot;border-color: black; background: #EB4646;&quot;, 
+            &quot;border-color: black; background: #EB4646;&quot;, 
+            &quot;border-color: black; background: #EB4646;&quot;, 
+            &quot;border-color: black; background: #EB4646;&quot;, 
+            &quot;border-color: black; background: #46AEEB;&quot;, 
+            &quot;border-color: black; background: #46AEEB;&quot;, 
+            &quot;border-color: black; background: #46AEEB;&quot;, 
+            &quot;border-color: black; background: #46AEEB;&quot;, 
+            &quot;border-color: black; background: #46AEEB;&quot;, 
+            &quot;border-color: black; background: #EB4646;&quot;)
+  
+)
+
+timevis(
+  timeline,
+  showZoom = TRUE,
+  zoomFactor = 0.5,
+  fit = TRUE,
+  width = &quot;110%&quot;
+  )</code></pre>
+<div id="htmlwidget-0886d0aa82ee39124b01" class="timevis html-widget" style="width:110%;height:480px;">
+<div class="btn-group zoom-menu">
+<button type="button" class="btn btn-default btn-lg zoom-in" title="Zoom in">+</button>
+<button type="button" class="btn btn-default btn-lg zoom-out" title="Zoom out">-</button>
+</div>
+</div>
+<script type="application/json" data-for="htmlwidget-0886d0aa82ee39124b01">{"x":{"items":[{"id":"1","content":"First COVID Case in NYC","start":"2020-03-01","style":"border-color: black; background: #EB4646;"},{"id":"2","content":"NYC issues guidelines to avoid densely packed buses, subways, or trains","start":"2020-03-08","style":"border-color: black; background: #EB4646;"},{"id":"3","content":"NYC Public Schools Close","start":"2020-03-16","style":"border-color: black; background: #EB4646;"},{"id":"4","content":"NYC Bars and Restaurants Close for In-Person Dining","start":"2020-03-17","style":"border-color: black; background: #EB4646;"},{"id":"5","content":"Governor Cuomo announces NYC subway closures from 1 am to 5 am","start":"2020-04-30","style":"border-color: black; background: #EB4646;"},{"id":"6","content":"NYC Begins Phase 1 Re-Opening","start":"2020-06-08","style":"border-color: black; background: #46AEEB;"},{"id":"7","content":"NYC Begins Phase 2 Re-Opening","start":"2020-06-022","style":"border-color: black; background: #46AEEB;"},{"id":"8","content":"NYC Begins Phase 3 of Re-Opening (without indoor dining)","start":"2020-07-06","style":"border-color: black; background: #46AEEB;"},{"id":"9","content":"NYC Begins Phase 4 of Re-Opening (excluding malls, museums, and indoor dining/bars)","start":"2020-07-19","style":"border-color: black; background: #46AEEB;"},{"id":"10","content":"Elementary Students Return to Public School Classrooms across NYC","start":"2020-09-29","style":"border-color: black; background: #46AEEB;"},{"id":"11","content":"NYC Schools Switch to Fully Remote","start":"2020-11-19","style":"border-color: black; background: #EB4646;"}],"groups":null,"showZoom":true,"zoomFactor":0.5,"fit":true,"options":[],"height":null,"timezone":null,"api":[]},"evals":[],"jsHooks":[]}</script>
+</div>
 
 
 
-
+</div>
+</div>
 
 </div>
 
@@ -340,6 +485,35 @@ $(document).ready(function () {
 });
 </script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
