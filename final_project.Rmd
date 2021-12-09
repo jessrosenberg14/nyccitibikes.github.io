@@ -31,9 +31,7 @@ manhattan_rides_df <-
     gender = type.convert(gender, as.is = F))
 ```
 
-## CitiBike Rides over the year 
-
-Overall and as expected, there were more CitiBike rides in 2019 beginning in the peak months of the pandemic in 2020. 
+## CitiBike Rides Over the Year 
 
 ```{r, Rides per day summary}
 manhattan_rides_df %>% 
@@ -42,10 +40,14 @@ manhattan_rides_df %>%
   ggplot(aes(x = start_date, y = obs, group = year, color = year)) +
   geom_line() + 
   geom_smooth(se = FALSE) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, color = rep(c("black", rep("transparent", each = 10)), 365)))
+  labs(title = "Number of CitiBike Rides in 2019 and 2020", x = "Start Date", y = "Number of Rides", col = "Year") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, color = rep(c("black", rep("transparent", each = 10)), 365))) +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
-## Average Ride length per month
+Overall and as expected, there were more CitiBike rides in 2019 beginning in the peak months of the pandemic in 2020. 
+
+## Average Ride Length per Month
 
 ```{r, average ride length per month}
 monthly_Q1 <- quantile(pull(manhattan_rides_df, trip_min), probs = 0.25)
@@ -80,7 +82,7 @@ monthly_rides_df %>%
 
 Looks like maybe the overall length of trips in 2019 was more consistent. 2020 had a bump in duration of rides, starting in April. Overall, trip length seems more variable in 2020.
 
-## Number of rides per month 
+## Number of Rides per Month 
 
 ```{r, number of rides per month}
 manhattan_rides_df %>% 
@@ -130,6 +132,8 @@ trip_dur_age_gender_df <-
     )
 ```
 
+## Average Trip Duration
+
 ```{r, trip_min by age_group and gender}
 #this generates a plot of boxplots of trip duration (minutes) by gender and age_group
 trip_dur_age_gender_df %>% 
@@ -141,9 +145,12 @@ trip_dur_age_gender_df %>%
     boxmode = "group",
     xaxis = list(title = "Age Range"), 
     yaxis = list(title = "Trip Duration (min)"), 
+    title = "Average Trip Duration (in minutes) in 2019 and 2020 by Age Group and Gender",
     legend = list(title = list(text = "<b> Gender </b>"))
   )
 ```
+
+We can see by comparing averages, females take longer rides than males across all age groups. Interestingly though there are more outliers for trip duration among males than females. On average younger riders take longer rides compared to older riders. Rides never surpassed 35 minutes. This makes sense because Citi Bike members get charged extra fees for trips over 40 mins. 
 
 ```{r, average age per day by gender}
 # this dataframe groups rides by gender and month
@@ -183,7 +190,9 @@ ggplotly(avg_age_plot) %>%
   layout(
     xaxis = list(title = "Date"), 
     yaxis = list(title = "Age"), 
+    title = list(text = "Average Age of CitiBike Riders in 2019 and 2020 by Gender", font = list(size = 16)),
     legend = list(title = list(text = "<b> Gender </b>"))
   )
 ```
 
+We see from this graph that across 2019 and 2020, the average age of male and female riders follow the same general trajectory. At all time points over this period, the average age of female riders is younger than the average age of male riders. The biggest age discrepancies appear in the summer months of both 2019 and 2020. 
