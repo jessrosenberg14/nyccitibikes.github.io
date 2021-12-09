@@ -40,7 +40,7 @@ manhattan_rides_df %>%
   ggplot(aes(x = start_date, y = obs, group = year, color = year)) +
   geom_line() + 
   geom_smooth(se = FALSE) +
-  labs(title = "Number of CitiBike Rides in 2019 and 2020") + 
+  labs(title = "Number of CitiBike Rides in 2019 and 2020", x = "Start Date", y = "Number of Rides", col = "Year") + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, color = rep(c("black", rep("transparent", each = 10)), 365))) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
