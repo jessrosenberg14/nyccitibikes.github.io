@@ -269,6 +269,12 @@ $(document).ready(function () {
   <a href="https://zoeverzani.shinyapps.io/subway_ridership/">Subway Shiny App</a>
 </li>
 <li>
+  <a href="http://github.com/jessrosenberg14/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="http://account.citibikenyc.com/access-plans">
     <span class="fas fa-bicycle"></span>
      
@@ -498,6 +504,215 @@ new_daily_gif</code></pre>
 <div id="shiny-app-common-rides-to-manhattan-locations" class="section level2">
 <h2>Shiny App: Common Rides to Manhattan Locations:</h2>
 <p>We created a shiny app to visualize the journeys to various Manhattan locations, which you can view <a href="https://mtr2143.shinyapps.io/shiny_end_stations/">here</a>.</p>
+<pre class="r"><code># manhattan_stations_upd filters out any citi bike station that appears more than once
+# (i.e. some stations with the same id have slightly different coordinates and thus appear
+# multiple times)
+manhattan_stations_upd &lt;-
+  manhattan_stations %&gt;% 
+  group_by(id) %&gt;% 
+  mutate(
+    num_rep = row_number()
+  ) %&gt;% 
+  ungroup() %&gt;% 
+  filter(num_rep == 1) %&gt;% 
+  select(!num_rep)
+
+# manhattan_rides_diff filters out manhattan_rides so we&#39;re only looking at rides
+# that start and end at different stations
+manhattan_rides_diff &lt;-
+  manhattan_rides %&gt;%  
+  filter(start_station_id != end_station_id)
+
+# the closest_station_info_fn takes in vectors of latitude and longitude
+# and returns a tibble where we get for each nyc location 
+# the geographic info for the closest end_station 
+# the geographic info for the most common start_station for trips ending at that end_station
+# the average age of riders for trips ending at that end_station
+# the average trip duration for trips ending at that end_station
+closest_station_info_fn &lt;- function(nyc_lat, nyc_long) {
+  
+  station &lt;-
+    manhattan_stations_upd %&gt;%
+    mutate(
+      distance = 
+        (geodist_vec(
+          x1 = rep(nyc_long, nrow(manhattan_stations_upd)),
+          y1 = rep(nyc_lat, nrow(manhattan_stations_upd)),
+          x2 = longitude, 
+          y2 = latitude, 
+          paired = T, 
+          measure = &quot;vincenty&quot;
+        ) * 3.281) 
+    ) %&gt;% 
+    slice_min(order_by = distance)
+  
+  start_station_popular &lt;-
+    manhattan_rides_diff %&gt;% 
+    filter(end_station_id %in% pull(station, id)) %&gt;% 
+    group_by(start_station_id, start_station_name, start_station_latitude, start_station_longitude) %&gt;% 
+    summarize(
+      total_trips = n()
+    ) %&gt;% 
+    ungroup() %&gt;% 
+    slice_max(order_by = total_trips)
+  
+  avg_table &lt;-
+    manhattan_rides_diff %&gt;% 
+    filter(
+      end_station_id %in% pull(station, id)
+    ) %&gt;% 
+    group_by(end_station_id, end_station_name, end_station_latitude, end_station_longitude) %&gt;% 
+    summarize(
+      avg_age = mean(age)
+    ) %&gt;% 
+    ungroup() %&gt;%
+    bind_cols(
+      start_station_popular
+    ) %&gt;% 
+    rename_with(~str_replace(., &quot;^end_station_&quot;, &quot;end_&quot;)) %&gt;% 
+    rename_with(~str_replace(., &quot;^start_station_&quot;, &quot;start_&quot;)) %&gt;% 
+    select(!total_trips) %&gt;% 
+    relocate(avg_age, .after = start_longitude)
+  
+  return(avg_table)
+  
+}
+
+# in the event there are ties for most common start_station for a particular end_station
+# we take the start_station that is furthest from the end_station
+# we also add a variable &#39;mi_from_end&#39; that tells how many miles the destination is from the end_station
+nyc &lt;-
+  nyc_locations %&gt;% 
+  mutate(
+    closest_station_info = map2(.x = location_lat, .y = location_long, .f = closest_station_info_fn)
+  ) %&gt;% 
+  unnest(closest_station_info) %&gt;% 
+  mutate(
+    distance_to_start = geodist_vec(
+      x1 = start_longitude,
+      y1 = start_latitude,
+      x2 = end_longitude, 
+      y2 = end_latitude, 
+      paired = T, 
+      measure = &quot;vincenty&quot;
+    ), 
+    location = factor(location)
+  ) %&gt;% 
+  group_by(location) %&gt;% 
+  slice_max(order_by = distance_to_start) %&gt;% 
+  select(!distance_to_start) %&gt;% 
+  ungroup()
+
+nyc_choices &lt;-
+  nyc_locations %&gt;% 
+  pull(location)
+
+### Shiny app stuff
+ui &lt;- 
+  fluidPage(
+    titlePanel(&quot;Visualizing Trips to Manhattan Destinations&quot;), 
+    sidebarLayout(
+      sidebarPanel(
+        selectInput(
+          &quot;site_choice&quot;, 
+          label = h4(&quot;Select your destination:&quot;), 
+          choices = nyc_choices
+        ), 
+        width = 3
+      ),
+      mainPanel(
+        leafletOutput(&quot;manhatttan_map&quot;), 
+        br(), br(),
+        plotOutput(&quot;lollipop_plot&quot;)
+      )
+    )
+  )
+server &lt;- function(input, output) {
+  output$manhatttan_map &lt;- renderLeaflet({
+    
+    nyc_site &lt;-
+      nyc %&gt;% 
+      filter(
+        location == input[[&quot;site_choice&quot;]]
+      )
+    
+    bike_icons &lt;- awesomeIconList(
+      red_bike   = makeAwesomeIcon(icon = &#39;bicycle&#39;, markerColor = &#39;red&#39;, iconColor = &#39;black&#39;, library = &quot;fa&quot;),
+      green_bike = makeAwesomeIcon(icon = &#39;bicycle&#39;, markerColor = &#39;green&#39;, iconColor = &#39;black&#39;, library = &quot;fa&quot;)
+    )
+    
+    city_icons &lt;- awesomeIconList(
+      city_pic = makeAwesomeIcon(icon = &#39;building&#39;, markerColor = &#39;white&#39;, iconColor = &#39;black&#39;, library = &quot;fa&quot;)
+    )
+    
+    gcIntermediate(
+      c(nyc_site$end_longitude[[1]], nyc_site$end_latitude[[1]]),
+      c(nyc_site$start_longitude[[1]], nyc_site$start_latitude[[1]]),
+      n = 100, 
+      addStartEnd = TRUE,
+      sp = TRUE
+    ) %&gt;% 
+    leaflet() %&gt;% 
+      addAwesomeMarkers(lng = nyc_site$end_longitude[[1]],
+                        lat = nyc_site$end_latitude[[1]],
+                        popup = str_c(&quot;You parked at the &quot;, nyc_site$end_name[[1]], &quot; station&quot;),
+                        icon = bike_icons[[&quot;red_bike&quot;]]
+      ) %&gt;% 
+      addAwesomeMarkers(lng = nyc_site$start_longitude[[1]],
+                        lat = nyc_site$start_latitude[[1]],
+                        popup = str_c(&quot;You started at the &quot;, nyc_site$start_name[[1]], &quot; station&quot;),
+                        icon = bike_icons[[&quot;green_bike&quot;]]
+      ) %&gt;% 
+      addAwesomeMarkers(lng = nyc_site$location_long[[1]],
+                        lat = nyc_site$location_lat[[1]], 
+                        popup = str_c(&quot;Your destination: &quot;, nyc_site$location[[1]]), 
+                        icon = city_icons[[&quot;city_pic&quot;]]
+      ) %&gt;% 
+      addProviderTiles(&quot;CartoDB.Positron&quot;) %&gt;% 
+      addPolylines()
+    
+  })
+  
+  output$lollipop_plot &lt;- renderPlot({
+    
+    input[[&quot;site_choice&quot;]]
+    
+    without_choice &lt;-
+      nyc %&gt;% 
+      filter(
+        location != input[[&quot;site_choice&quot;]]
+      ) %&gt;% 
+      mutate(
+        location = fct_reorder(location, avg_age)
+      )
+    
+    choice_only &lt;-
+      nyc %&gt;% 
+      filter(
+        location == input[[&quot;site_choice&quot;]]
+      )
+    
+    without_choice %&gt;% 
+      ggplot(aes(x = avg_age, y = location)) +
+      geom_segment(aes(x = choice_only$avg_age[[1]], xend = avg_age, y = location, yend = location), color = &quot;grey&quot;) +
+      geom_point(
+        color = ifelse(without_choice$avg_age &gt; choice_only$avg_age[[1]], &quot;blue&quot;, &quot;red&quot;),
+        size = 4
+      ) +
+      geom_vline(xintercept = choice_only$avg_age[[1]]) +
+      theme_light() +
+      theme(
+        panel.grid.major.y = element_blank(), 
+        panel.border = element_blank(), 
+        axis.ticks.y = element_blank()
+      ) +
+      xlab(&quot;&quot;) + ylab(&quot;&quot;)
+    
+  })
+  
+}
+
+shinyApp(ui = ui, server = server)</code></pre>
 <p>To interact with this app:</p>
 <ol style="list-style-type: decimal">
 <li><p>Select a Manhattan location and watch how both the map and plot below it change.</p></li>

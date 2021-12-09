@@ -585,7 +585,7 @@ measures_of_interest %>%
 ```
 
 **Ridership Transit System Percent Change Following COVID**: We then wanted to examine how ridership of all commuting services changed from 2019 compared to 2020. We found that every transit service experienced a drop in ridership in March 2020 compared to 2019 levels, coinciding with the start of lockdown. However, CitiBike usage recovered and in many cases exceeded its 2019 levels, while all other forms of transit stayed below the usage levels seen in 2019.
-```{r, plot with everything, message=FALSE, warning=F}
+```{r, plot with everything, eval = FALSE}
 renamed_ridership = 
   ridership_pc_change %>%
     mutate(transit_system = factor(transit_system, levels = c("access_a_ride", "bridges_and_tunnels",

@@ -16,7 +16,7 @@ navbar:
     - text: "Subway Shiny App"
       href: https://zoeverzani.shinyapps.io/subway_ridership/
     - icon: fa-github fa-lg
-      href: http://github.com/jessrosenberg14/
+      href: https://github.com/jessrosenberg14/nyccitibikes.github.io
     - icon: fas fa-bicycle
       href: http://account.citibikenyc.com/access-plans
 output:
