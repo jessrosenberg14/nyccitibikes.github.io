@@ -71,9 +71,11 @@ measures_of_interest %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
+This animated graph displays changes in CitiBike annual passes, single-day passes and single-trip passes from January 2019 through November 2021 (when we last pulled these reports). As seen by this graph, spikes in memberhsip tend to occur in summer months. During the COVID-19 pandemic, there was a major spike in all forms
+of CitiBike memberships from April 2020 through August 2020 and this spike was most significant for single-trip purchases. Another even more significant spike occurred from May 2021 through August 2021. 
+
 ```{r, input manhattan rides data, message=FALSE}
 manhattan_rides_df <- read_csv("manhattan_rides.csv")
-
 manhattan_rides_df <-
   manhattan_rides_df %>% 
   mutate(
@@ -84,82 +86,23 @@ manhattan_rides_df <-
                        levels = c("18-25","26-35", "36-45", "46-55", "56-65", "66-85")), 
     gender = type.convert(gender, as.is = F))
 
-manhattan_rides_df %>% 
-  group_by(age_group) %>% 
-  summarize(min = min(age), max = max(age), obs = n())
 ```
-
-```{r, average ride length per month, message=FALSE, warning=F}
-manhattan_rides_df %>% 
-  group_by(year) %>% 
-  mutate(
-    month = month(starttime, label = T)
-  ) %>% 
-  filter(tripduration < 2500) %>% 
-  plot_ly(
-    x = ~month, 
-    y = ~trip_min,
-    color = ~year,
-    type = "box") %>% 
-  layout(
-    boxmode = "group",
-    title = "Duration of Citibike Rides by Month",
-    xaxis = list(title = "Month"),
-    yaxis = list(title = "Trip Duration in Minutes")
-    )
-```
-
-Looks like maybe the overall length of trips in 2019 was more consistent. 2020 had a bump in duration of rides, starting in April. Overall, trip length seems more variable in 2020.
-
-```{r, number of rides per month, message=FALSE, warning=F}
-manhattan_rides_df %>% 
-  group_by(year) %>% 
-  mutate(
-    month = month(starttime, label = T)
-  ) %>% 
-  group_by(year, month) %>% 
-  summarise(obs = n()) %>% 
-  plot_ly(
-    x = ~month, 
-    y = ~obs, 
-    color = ~year,
-    type = "scatter",
-    mode = "lines") %>%  
-  layout(
-    title = "Number of Citibike Rides per Month",
-    xaxis = list(title = "Month"),
-    yaxis = list(title = "Rides")
-  )
-```
-
-Huge drop in monthly trips in April 2020. Lockdown started mid/late March so this coincides with people transitioning to WFH and largely staying inside to minimize contacts. The ride numbers bounce back quite a bit after this but not to 2019 levels.
 
 ```{r, percent change dataset, message=FALSE, warning=F}
-citi_pc_change = 
-  manhattan_rides_df %>% 
-  mutate(date = format(stoptime, format = "%m-%d-%Y")) %>% 
-  group_by(stop_date, year) %>% 
-  summarize(daily_rides = n()) %>% 
-  ungroup() %>% 
-  group_by(stop_date) %>% 
-  arrange(year, .by_group = T) %>% 
+citi_pc_change =
+  manhattan_rides_df %>%
+  mutate(date = format(stoptime, format = "%m-%d-%Y")) %>%
+  group_by(stop_date, year) %>%
+  summarize(daily_rides = n()) %>%
+  ungroup() %>%
+  group_by(stop_date) %>%
+  arrange(year, .by_group = T) %>%
   mutate(percent_change = (daily_rides/lag(daily_rides) - 1) * 100) %>%
-  filter(year == 2020) %>% 
-  select(date = stop_date, percent_change) %>% 
+  filter(year == 2020) %>%
+  select(date = stop_date, percent_change) %>%
   mutate(transit_system = "citi_bike",
-         date = paste0("2020-", date),
-         date = as.Date(date, "%Y-%m-%d"))
-```
-
-```{r, CitiBike ridership percent change plot, message=FALSE, warning=F}
-# Using ggplot
-post_covid_transit = citi_pc_change %>% 
-  ungroup() %>% 
-  drop_na() %>% 
-  ggplot(aes(x = date, y = percent_change, color = transit_system)) +
-  geom_smooth(aes(color = transit_system))
-
-ggplotly(post_covid_transit)
+     	date = paste0("2020-", date),
+     	date = as.Date(date, "%Y-%m-%d"))
 ```
 
 ```{r, copied from subway_rides RMD, message=FALSE, warning=F}
@@ -219,18 +162,18 @@ ridership_pc_change =
 ```
 
 ```{r, plot with everything, message=FALSE, warning=F}
-# Using ggplot
-post_covid_transit = ridership_pc_change %>% 
-  ungroup() %>% 
-  drop_na() %>% 
-  filter(date >= as.Date('2020-03-01')) %>% 
-  ggplot(aes(x = date, y = percent_change, color = transit_system)) +
-  geom_smooth(aes(color = transit_system))
-
-ggplotly(post_covid_transit)
+renamed_ridership = 
+  ridership_pc_change %>%
+    mutate(transit_system = factor(transit_system, levels = c("access_a_ride", "bridges_and_tunnels",
+                                                              "buses", "citi_bike", "lirr", "metro_north",
+                                                              "subways"), 
+                                   labels = c("Access a Ride", "Bridges and Tunnels", "Buses",
+                                              "Citi Bike", "Long Island Railroad", "Metro North",
+                                              "Subways")))
+      
 
 # Using plotly 
-ridership_pc_change %>% 
+renamed_ridership %>% 
   ungroup() %>% 
   drop_na() %>% 
   filter(date >= as.Date('2020-03-01')) %>% 
@@ -246,3 +189,5 @@ ridership_pc_change %>%
     yaxis = list(title = "Percent Change")
   )
 ```
+
+This plot shows the percent change in ridership in 2020 compared to 2019 for various transit services across NYC. By this graph we can see that every transit service experienced a drop in ridership in March 2020 compared to 2019 levels, coinciding with the start of lockdown. However, Citi Bike usage recovered and in many cases exceeded its 2019 levels, while all other forms of transit stayed below the usage levels seen in 2019.

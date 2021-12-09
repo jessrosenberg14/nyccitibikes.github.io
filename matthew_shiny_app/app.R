@@ -196,7 +196,7 @@ server <- function(input, output) {
                         popup = str_c("Your destination: ", nyc_site$location[[1]]), 
                         icon = city_icons[["city_pic"]]
       ) %>% 
-      addProviderTiles("OpenStreetMap.HOT") %>% 
+      addProviderTiles("CartoDB.Positron") %>% 
       addPolylines()
     
   })
