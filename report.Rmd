@@ -161,45 +161,55 @@ We used two MTA datasets:
 
 ### Turnstile data
 
-Subway turnstiles data from [2019](https://data.ny.gov/Transportation/Turnstile-Usage-Data-2019/xfn5-qji9) and [2020](https://data.ny.gov/Transportation/Turnstile-Usage-Data-2020/py8k-a8wg) were downloaded. These datasets included information about the number of entries and exits from a given turnstile across all subway stations. We filtered to only Manhattan stations and converted latitude and longitude of stations to numeric variables, creating the `turnstiles_2019_m` and `turnstiles_2020_m` datsets. We then merged those dataset, resulting in the datafile `turnstiles_19_20_m`, which includes 12 variables, some of which are listed below: 
+Subway turnstiles data from [2019](https://data.ny.gov/Transportation/Turnstile-Usage-Data-2019/xfn5-qji9) and [2020](https://data.ny.gov/Transportation/Turnstile-Usage-Data-2020/py8k-a8wg) were downloaded. These datasets included information about the number of entries and exits from a given turnstile across all subway stations. We filtered to only Manhattan stations and converted latitude and longitude of stations to numeric variables, creating the `turnstiles_2019_data` and `turnstiles_2020_data` datsets. We then merged those datasets, resulting in the datafile called `shiny_data`. We created a new variable describing the percent change in ridership (exit and entry) per station from 2019 to 2020. This file was used to build our Subway Ridership Shiny App. This new data file contains 12 variables, some of which are listed below: 
 ```{r, turnstile data cleaning, eval = FALSE}
+## Turnstile Data
 ### loading 2019 data
 turnstiles_data_2019 = read_csv("./data/2019-turnstile.csv") %>% 
-  mutate(gtfs_latitude = as.numeric(gtfs_latitude),
-         gtfs_longitude = as.numeric(gtfs_longitude),
-         borough = recode(borough, Q = "Queens", Bk = "Brooklyn", Bx = "Bronx", M = "Manhattan", SI = "Staten Island"),
-         month = format(as.Date(date), "%m"),
-         day_month = format(date, "%m/%d")) %>% 
-  drop_na()
+    mutate(gtfs_latitude = as.numeric(gtfs_latitude),
+           gtfs_longitude = as.numeric(gtfs_longitude),
+           borough = recode(borough, Q = "Queens", Bk = "Brooklyn", Bx = "Bronx", M = "Manhattan", SI = "Staten Island"),
+           month = format(as.Date(date), "%m"),
+           day_month = format(date, "%m/%d")) %>% 
+    drop_na()
 
 ### calculating each stop's monthly average rates in 2019 (pre pandemic)
 turnstiles_data_2019_averages = 
-  turnstiles_data_2019 %>% 
-  group_by(month, complex_id) %>% 
-  summarise(avg_exits = mean(exits),
-            avg_entries = mean(entries))
+    turnstiles_data_2019 %>% 
+    group_by(month, complex_id) %>% 
+    summarise(avg_exits = mean(exits),
+              avg_entries = mean(entries))
 
 ### loading 2020 data 
 turnstiles_data_2020 = read_csv("./data/2020-turnstile.csv") %>% 
-  mutate(gtfs_latitude = as.numeric(gtfs_latitude),
-         gtfs_longitude = as.numeric(gtfs_longitude),
-         month = format(as.Date(date), "%m"),
-         borough = recode(borough, Q = "Queens", Bk = "Brooklyn", Bx = "Bronx", M = "Manhattan", SI = "Staten Island"),
-         day_month = format(date, "%m/%d")) %>% 
-  drop_na()
+    mutate(gtfs_latitude = as.numeric(gtfs_latitude),
+           gtfs_longitude = as.numeric(gtfs_longitude),
+           month = format(as.Date(date), "%m"),
+           borough = recode(borough, Q = "Queens", Bk = "Brooklyn", Bx = "Bronx", M = "Manhattan", SI = "Staten Island"),
+           day_month = format(date, "%m/%d")) %>% 
+    drop_na()
 
 ### merging 2020 data with the monthly average turnstile usage for 2019 - pre pandemic 
 total = merge(turnstiles_data_2020, turnstiles_data_2019_averages, by = c("complex_id", "month")) %>% 
-  mutate(entries_pc = (((entries-avg_entries)/avg_entries)*100),
-         exits_pc = (((exits-avg_exits)/avg_exits)*100)) %>% 
-  mutate(entries_pc = ifelse(entries_pc>100, 100, entries_pc),
-         exits_pc = ifelse(exits_pc>100, 100, exits_pc)) %>% 
-  select(-c(day_month, avg_entries, avg_exits, entries, exits, month))
+    mutate(entries_pc = (((entries-avg_entries)/avg_entries)*100),
+           exits_pc = (((exits-avg_exits)/avg_exits)*100)) %>% 
+    mutate(entries_pc = ifelse(entries_pc>100, 100, entries_pc),
+           exits_pc = ifelse(exits_pc>100, 100, exits_pc)) %>% 
+    select(-c(day_month, avg_entries, avg_exits, entries, exits, month))
+    
+### creating data for Shiny App
+shiny_data = total %>% 
+    pivot_longer(
+        cols = entries_pc:exits_pc,
+        names_to = "turnstile_type",
+        values_to = "turnstile_count"
+    ) %>% 
+    drop_na()
 ```
 *   `stop_name`: Station name
 *   `daytime_routes`: Subway lines 
-*   `entries`: Number of entries at a given turnstile 
-*   `exits`: Number of exits at a given turnstile 
+*   `turnstile_type`: Describing if the rider is entering or exiting the station
+*   `turnstile_count`: Number of entries/exits at a given turnstile 
 
 ### Percent Change data
 
@@ -260,7 +270,7 @@ manhattan_rides_df %>%
   geom_smooth(se = FALSE) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, color = rep(c("black", rep("transparent", each = 10)), 365)))
 ```
-**Average ride length by month**: We then looked at trip duration by month, assuming that longer trips typically occur in warmed months and shorter trips take place during the cooler months. Upon initial examination of trip duration data, we found many outliers, namely trips of over 1,000,000 seconds. We assumed that these trips included people who did not properly dock the bikes at the end station, some who stole bikes or took them home for convenient use in the future, or similar situations. We filtered out these outliers using the IQR method and then examined trip duration using boxplots. We actually found that trip during was relatively stable in 2019, but increased in March 2020. This is likely because as people were less comfortable using the subway during COVID, they turned to longer CitiBike rides. 
+**Average ride length by month**: We then looked at trip duration by month, assuming that longer trips typically occur in warmed months and shorter trips take place during the cooler months. Upon initial examination of trip duration data, we found many outliers, namely trips of over 1,000,000 seconds. We assumed that these trips included people who did not properly dock the bikes at the end station, some who stole bikes or took them home for convenient use in the future, or similar situations. We filtered out these outliers using the IQR method and then examined trip duration using boxplots. We actually found that trip duration was relatively stable in 2019, but increased in March 2020. This is likely because as people were less comfortable using the subway during COVID, they turned to longer CitiBike rides. 
 ```{r, average ride length per month, eval = FALSE}
 monthly_Q1 <- quantile(pull(manhattan_rides_df, trip_min), probs = 0.25)
 monthly_Q3 <- quantile(pull(manhattan_rides_df, trip_min), probs = 0.75)
@@ -614,17 +624,11 @@ We did not undertake any formal statistical analyses, as our research questions 
 
 # Discussion 
 
-Generally, our findings were consistent with what we expected based on our experience during COVID-19. As more companies began working form home, we assumed that CitiBike (and MTA, for that matter) rides would decrease during the week and during the period of the year where stay-at-home measures were most stringent. Our data and visualizations confirmed this. Our exploratory analyses also co
+The goal of this project was to examine how usage of Citi Bikes and overall NYC transit changed as a result of the COVID-19 pandemic. Our work shows that there were more rides in 2019 compared to the early months of the pandemic in 2020. There was a dip in ridership in March of 2020 when cases first started arising in NYC. On average, trip durations were longer throughout 2020 than in 2019. The longest rides occurred between March 2020 and August 2020. This is not surprising given that during this time, many people were avoiding using the MTA as a mode of transportation to avoid close contact with others. In March 2020, there was a major spike in all forms of Citi Bike memberships from April 2020 through August 2020 and this spike was most significant for single-trip purchases. Another even more significant spike occurred from May 2021 through August 2021.
+We see these same patterns displayed when examining our animated maps looking at month to month ridership when comparing 2019 to 2020. Interestingly in August of 2020, Citi Bike expanded the number of stops they have in northern Manhattan. Clearly these new stations were very popular among riders in that area. We created a Shiny App to allow the user to explore common ride journeys through various locations in Manhattan. Destinations include Columbia University and the Met. 
 
+We also found interesting patterns of Citi Bike ridership by age and gender. Across all time points from 2019 to 2020, the average age of riders was higher in males than in females. Not surprisingly, younger riders have on average longer trip durations than older riders. 
 
+In addition, we examined how ridership changed starting at the beginning of the pandemic for Citi Bike as well as other NYC transit systems including the Subway, Metro North, and Buses. From this graph, we can see that every transit service experienced a drop in ridership in March 2020 when compared to 2019 levels, which coincides with the start of lockdown. However eventually, Citi Bike usage recovered and, in many cases, exceeded its 2019 levels, while all other forms of transit stayed below the usage levels seen in 2019. This finding was not surprising. We also created a shiny app to allow the user to see daily percent change of Subway Ridership data comparing 2019 to 2020. We can see that in March ridership went down by nearly 100% and remained low for the rest of the year. 
 
-
-
-
-
-
-
-
-
-
-
+Overall, our project demonstrates that all forms of transportation across NYC fell in their usage when the Covid-19 pandemic first hit the city. It also shows that at times when public transportation usage was down, Citi Bike usage went up. Despite the difficulties that the pandemic has brought to the city, Citi Bike experienced an increase in ridership and an expansion of stations.
