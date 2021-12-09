@@ -28,8 +28,6 @@ Finally, because the CitiBike data include latitudes and longitudes for both sta
 
 # Initial Questions
 
-(Initial questions: What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?) 
-
 Initially, we wanted to understand how CitiBike ridership changed in response to the COVID pandemic and various events (i.e., beginning work from home, city-wide stay at home orders, etc.). We sought to examine changes in MTA ridership relative to CitiBike ridership, as well as various descriptive statistics of CitiBike riders. Common routes, meaning typical starting and ending destinations, were also of interest.  
 
 While we initially wanted to examine trends in riderships specifically related to hospital workers using CitiBike to get to and from work, we were not able to do this, as available data do not indicate industry in which a rider works. 
@@ -44,7 +42,7 @@ Fortunately, the available data did allow us to explore our other questions and 
 
 # Data
 
-We used two primary data sources for this work: 
+We used several data sources for this work: 
 
 ### **CitiBike Data**
 
@@ -221,32 +219,32 @@ ridership_covid_changes = read_csv("covid-ridership.csv") %>%
   rename(bridges_and_tunnels_pc = bridges_and_tunnels_percent_change_from_pre_pandemic_equivalent_day) %>% 
   rename(access_a_ride_ter = access_a_ride_total_scheduled_trips) %>% 
   rename(access_a_ride_pc = access_a_ride_percent_change_from_pre_pandemic_equivalent_day)
+
+ridership_covid_changes_2020 = ridership_covid_changes %>% 
+  filter(date <= as.Date('2020-12-31'))
+
+ridership_covid_pc_tidy = 
+  ridership_covid_changes_2020 %>% 
+  
+  select(date, access_a_ride_pc, bridges_and_tunnels_pc, buses_pc, lirr_pc, metro_north_pc, subways_pc) %>% 
+  
+  pivot_longer(
+    c(access_a_ride_pc:subways_pc), 
+    names_to = "transit_system",
+    values_to = "percent_change"
+  ) %>% 
+  
+   mutate(transit_system = gsub("_pc", "", transit_system),
+          percent_change = gsub("%", "", percent_change),
+          percent_change = as.numeric(percent_change))
 ```
 
 After importing and cleaning, the resulting datafile, `ridership_covid_pc_tidy`, includes the following variables: 
-```{r, percent change dataset, eval = FALSE}
-citi_pc_change = 
-  manhattan_rides_df %>% 
-  mutate(date = format(stoptime, format = "%m-%d-%Y")) %>% 
-  group_by(stop_date, year) %>% 
-  summarize(daily_rides = n()) %>% 
-  ungroup() %>% 
-  group_by(stop_date) %>% 
-  arrange(year, .by_group = T) %>% 
-  mutate(percent_change = (daily_rides/lag(daily_rides) - 1) * 100) %>%
-  filter(year == 2020) %>% 
-  select(date = stop_date, percent_change) %>% 
-  mutate(transit_system = "citi_bike",
-         date = paste0("2020-", date),
-         date = as.Date(date, "%Y-%m-%d"))
-```
 *   `date`: Date
 *   `transit_system`: Mode of transportation (Access a Ride, Bridges and Tunnels, Buses, LIRR, Metro North, or Subways) 
 *   `percent_change`: Percent change in rides from the year prior 
 
 # Exploratory Analysis
-
-(Exploratory analysis: Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.)
 
 As outlined above, we had several categories of questions to explore and an even greater number of questions. 
 
@@ -606,7 +604,9 @@ renamed_ridership %>%
   )
 ```
 
-**Shiny App: Subway Ridership Percent Change from 2019 to 2020**: ADD THIS 
+**Shiny App: Subway Ridership Percent Change from 2019 to 2020**: Finally, we wanted to examine how subway ridership changes across locations between 2019 and 2020. Specifically, we looked at entry and exit data from Subway turnstiles to understand where people are going to and coming from throughout the year. 
+
+We created a shiny app to visualize the percent change in subway ridership to various NYC locations across the 5 boroughs, which you can view [here] (https://zoeverzani.shinyapps.io/subway_ridership/). Please look at our [Commuting Services](commuting_services.html) page to learn how to interact with our shiny app. 
 
 # Additional Analysis 
 

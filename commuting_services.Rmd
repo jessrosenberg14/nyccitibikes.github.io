@@ -196,9 +196,11 @@ renamed_ridership %>%
 
 This plot shows the percent change in ridership in 2020 compared to 2019 for various transit services across NYC. By this graph we can see that every transit service experienced a drop in ridership in March 2020 compared to 2019 levels, coinciding with the start of lockdown. However, Citi Bike usage recovered and in many cases exceeded its 2019 levels, while all other forms of transit stayed below the usage levels seen in 2019.
 
-## Shiny App: Subway Ridership Percent Change from 2019 to 2020 
+## Shiny App: Subway Ridership Percent Change from 2019 to 2020
 
-We created a shiny app to visualize subway ridership change from 2019 to 2020, which you can view [here] (https://zoeverzani.shinyapps.io/subway_ridership/). 
+We created a shiny app to visualize subway ridership change from 2019 to 2020, which you can view [here](https://zoeverzani.shinyapps.io/subway_ridership/). 
+
+This Shiny App shows how subway ridership changed from 2019 to 2020 in any of the NYC boroughs. We looked at entry and exit data, specifically. 
 
 To interact with this app:
 
