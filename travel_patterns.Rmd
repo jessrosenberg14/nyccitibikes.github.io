@@ -64,6 +64,8 @@ manhattan_rides_df %>%
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
+The number of rides per day was higher in 2019 during the week than in 2020, likely due to the shift to working from home in 2020. Interestingly, there were slightly more rides on the weekends in 2020, likely because of a predisposition to use biking as a mode of transportation, rather than subways, during COVID-19. 
+
 ```{r, read in hubs and hospital data}
 hubs_df = 
   read_csv("hubs.csv") %>% 
