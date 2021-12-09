@@ -252,7 +252,7 @@ This graph displays the daily ridership in 2019 vs 2020 for lower Manhattan. Eve
 
 ## Shiny App: Common Rides to Manhattan Locations:
 
-We created a shiny app to visualize the journeys to various Manhattan locations, which you can view [here] (https://mtr2143.shinyapps.io/shiny_end_stations/). 
+We created a shiny app to visualize the journeys to various Manhattan locations, which you can view [here](https://mtr2143.shinyapps.io/shiny_end_stations/). 
 
 To interact with this app:
 

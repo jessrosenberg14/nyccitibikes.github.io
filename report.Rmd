@@ -123,7 +123,7 @@ write_csv(manhattan_rides_df, "manhattan_rides.csv")
 Additionally, we pulled the [CitiBike Monthly Operating Reports] (https://ride.citibikenyc.com/system-data/operating-reports) and combined information on the number of each Membership type into a single dataset. This was used to show changes in CitiBike annual passes, single-day passes and single-trip passes from January 2019 through November 2021 (when we last
 pulled these reports).
 
-```{r input citibike membership data, eval = FALSE}
+```{r, citibike membership data, eval = FALSE}
 membership_df = 
   read_csv("ridership.csv") %>%
   mutate(date = factor(date, ordered = TRUE, levels = c("01/2019", "02/2019", "03/2019", "04/2019",
@@ -206,37 +206,23 @@ total = merge(turnstiles_data_2020, turnstiles_data_2019_averages, by = c("compl
 ### Percent Change data
 
 Additionally, we downloaded [COVID MTA ridership data](https://new.mta.info/coronavirus/ridership), which details the percent change in MTA ridership during COVID by transportation type. 
-```{r input citibike membership data, eval = FALSE}
-membership_df = 
-  read_csv("ridership.csv") %>%
-  mutate(date = factor(date, ordered = TRUE, levels = c("01/2019", "02/2019", "03/2019", "04/2019",
-                                                         "05/2019", "06/2019", "07/2019", "08/2019",
-                                                         "09/2019", "10/2019", "11/2019", "12/2019",
-                                                         "01/2020", "02/2020", "03/2020", "04/2020",
-                                                         "05/2020", "06/2020", "07/2020", "08/2020",
-                                                         "09/2020", "10/2020", "11/2020", "12/2020",
-                                                         "01/2021", "02/2021", "03/2021", "04/2021",
-                                                         "05/2021", "06/2021", "07/2021", "08/2021",
-                                                         "09/2021", "10/2021"))) %>%
-  rename(ct_annual_members = annual_members) %>%
-  rename(ct_single_trip_passes = single_trip_passes) %>%
-  rename(ct_single_day_passes = single_day_passes) %>%
-  rename(ct_three_day_passes = three_day_passes) %>%
-  rename(ct_total_annual_members = total_annual_members) %>%
-  mutate(date = as.yearmon(date, "%m/%Y")) %>%
-  mutate(date = as.jul(date)) %>%
-  mutate(date = as.Date(date)) %>%
-  pivot_longer(
-    cols = starts_with("ct"),
-    names_to = "measure",
-    values_to = "count"
-  ) 
-
-
-measures_of_interest =
-  membership_df %>%
-  filter(measure %in% c("ct_annual_members","ct_single_day_passes","ct_single_trip_passes"))
+```{r, percent change data, eval = FALSE}
+ridership_covid_changes = read_csv("covid-ridership.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(date = as.Date(date, "%m/%d/%Y")) %>% 
+  rename(buses_ter = buses_total_estimated_ridership) %>% 
+  rename(lirr_ter = lirr_total_estimated_ridership) %>% 
+  rename(metro_north_ter = metro_north_total_estimated_ridership) %>% 
+  rename(subways_ter = subways_total_estimated_ridership) %>% 
+  rename(subways_pc = subways_percent_change_from_pre_pandemic_equivalent_day) %>% 
+  rename(metro_north_pc = metro_north_percent_change_from_2019_monthly_weekday_saturday_sunday_average) %>% 
+  rename(lirr_pc = lirr_percent_change_from_2019_monthly_weekday_saturday_sunday_average) %>% 
+  rename(buses_pc = buses_percent_change_from_pre_pandemic_equivalent_day) %>% 
+  rename(bridges_and_tunnels_pc = bridges_and_tunnels_percent_change_from_pre_pandemic_equivalent_day) %>% 
+  rename(access_a_ride_ter = access_a_ride_total_scheduled_trips) %>% 
+  rename(access_a_ride_pc = access_a_ride_percent_change_from_pre_pandemic_equivalent_day)
 ```
+
 After importing and cleaning, the resulting datafile, `ridership_covid_pc_tidy`, includes the following variables: 
 ```{r, percent change dataset, eval = FALSE}
 citi_pc_change = 

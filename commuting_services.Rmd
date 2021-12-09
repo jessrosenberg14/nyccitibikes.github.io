@@ -198,25 +198,18 @@ This plot shows the percent change in ridership in 2020 compared to 2019 for var
 
 ## Shiny App: Subway Ridership Percent Change from 2019 to 2020 
 
-*FIX THIS WITH ZOE'S DESCRIPTION*
-
 We created a shiny app to visualize subway ridership change from 2019 to 2020, which you can view [here] (https://zoeverzani.shinyapps.io/subway_ridership/). 
 
 To interact with this app:
 
- 1. Select a Manhattan location and watch how both the map and plot below it change. 
+ 1. Select a Date you would like to plot looking at how Subway Ridership changes over 2019 to 2020.
 
-2. The red icon represents the bike station closest to the Manhattan destination you selected
+2. Select the NYC Boroughs you would like to see data on. By default, Manhattan is clicked. You can click on as many Boroughs as you would like to see. 
 
-3. The green icon represents the bike station where most trips ending at the station near your destination begin
+3. Select what type of Turnstile Data you would like to visualize. Exit data represents riders leaving the subway stations while Entry data represents riders entering the subway station. You can only plot Exit or Entry data but not both. 
 
-4. The building icon represents the destination you selected. 
+5. Once the map loads you can zoom in and out as well as move the map around. 
 
-5. Click on the map icons to learn more.
-
-6. Note how the average age of riders compared to the selected destination changes in the lollipop plot under the map. 
-
-7. These paths between stations are just there to give you an idea of the distance between stations and relative to the destination. They are not recommended paths (*please* - don't try to ride through the Central Park reservoir)
-
+6. The legend shows percent change for each subway stop comparing turnstile data from 2020 to 2019. Darker colors (purple) show a decrease in ridership while lighter colors (yellow) represent an increase in ridership.
 
 
