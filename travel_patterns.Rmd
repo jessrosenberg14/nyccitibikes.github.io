@@ -74,6 +74,8 @@ hospitals_df =
   drop_na()
 ```
 
+Following is a side by side comparison of monthly rides in 2019 and 2020. Hospitals are marked with red dots and financial hubs are marked with green dots. 
+
 ```{r, rides in 2019 vs 2020 by month}
 nyc = 
   as_tibble(
@@ -153,7 +155,7 @@ for (i in 2:12) {
 new_month_gif
 ```
 
-In mid-2020, Citi Bike expanded stops into northern Manhattan, driving the expansion of the bubble graph area seen in late-2020. 
+In mid-2020, Citi Bike expanded stops into northern Manhattan, driving the expansion of the bubble graph area seen in late-2020. We can see that 2020 started off with more rides than 2019, but then decreased significantly in March. Ridership numbers recovered a bit later in the year, but not quite to 2019 levels. 
 
 ```{r, zoomed daily map}
 bikes_2019 = manhattan_rides_df %>% 
@@ -238,3 +240,4 @@ for (i in 2:60) {
 new_daily_gif
 ```
 
+This graph displays the daily ridership in 2019 vs 2020 for lower Manhattan. Even more than in the monthly graph above, this makes apparent how drastically the usage of Citi Bike dropped in late-March 2020 compared to 2019. The areas of the city that were still utilized during this drop tended to be near either financial hubs or hospitals, marked with green or red dots respectively.
