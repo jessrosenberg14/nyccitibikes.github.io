@@ -382,23 +382,23 @@ div.tocify {
 <h1>Motivation</h1>
 <p>If you’ve been in New York for 10 days or 10 years, you’ve inevitably seen, if not ridden, one of our City’s cherished CitiBikes. Although not all New Yorkers love CitiBikes as much as our own Zoe Verzani, they are used as a primary mode of transportation (and exercise) for many NYC residents.</p>
 <p>Our project aims to examine CitiBike data from January 2019 to December 2020 to understand the impact of COVID-19 on CitiBike ridership and local travel more generally.</p>
-<p>In an effort to limit the scope of this work, our analysis focused on rides that began and ended in Manhattan. To supplement the CitiBike ridership data, our group examined other public transportation data in New York (i.e., MTA data) to understand how changes in CitiBike ridership differed or mirrored changes in subway or bus ridership during the COVID-19 pandemic.</p>
+<p>In an effort to limit the scope of this work, our analysis focused on CitiBike rides that began and ended in Manhattan. To supplement the CitiBike ridership data, our group examined other public transportation data in New York (i.e., MTA data) to understand how changes in CitiBike ridership differed or mirrored changes in subway or bus ridership during the COVID-19 pandemic.</p>
 </div>
 <div id="related-work" class="section level1">
 <h1>Related Work</h1>
-<p><img src="https://media.giphy.com/media/l41lW0esiJ92DmHBu/giphy.gif" /></p>
+<p><img src="pushups.gif" /></p>
 <p><em>Pictured here: One of our group members, Zoe. Zoe is an avid CitiBike user, and it was her interest in CitiBikes that led to our initial exploration of CitiBike data.</em></p>
-<p>After examining the available data, we found that these data were relatively complete and detailed. With some initial Googling, we found that our question was of significant interest to <a href="https://medium.com/qri-io/building-a-daily-aggregate-dataset-from-raw-citibike-trip-data-2b6502009871">other New Yorkers</a>, as well.</p>
+<p>After examining the available data, we found that these data were relatively complete and detailed. With some initial Googling, we found that our interest in CitiBikes was not unique, but quite common among <a href="https://medium.com/qri-io/building-a-daily-aggregate-dataset-from-raw-citibike-trip-data-2b6502009871">other New Yorkers</a>.</p>
 <p>Finally, because the CitiBike data include latitudes and longitudes for both starting and ending stations, we were excited about the potential to create map-based visualizations, building on our knowledge from ggplot2 and the Visualizations modules.</p>
 </div>
 <div id="initial-questions" class="section level1">
 <h1>Initial Questions</h1>
 <p>Initially, we wanted to understand how CitiBike ridership changed in response to the COVID pandemic and various events (i.e., beginning work from home, city-wide stay at home orders, etc.). We sought to examine changes in MTA ridership relative to CitiBike ridership, as well as various descriptive statistics of CitiBike riders. Common routes, meaning typical starting and ending destinations, were also of interest.</p>
-<p>While we initially wanted to examine trends in riderships specifically related to hospital workers using CitiBike to get to and from work, we were not able to do this, as available data do not indicate industry in which a rider works.</p>
+<p>While we initially wanted to examine trends in ridership specifically related to hospital workers using CitiBike to get to and from work, we were not able to do this, as available data do not indicate industry in which a rider works.</p>
 <p>Fortunately, the available data did allow us to explore our other questions and identify new ones. Ultimately, we landed on three categories of exploration:</p>
 <ol style="list-style-type: decimal">
-<li><p><strong>Descriptive Statistics</strong>: Who uses CitiBike? What are the age and sex distributions of users? What days of the week are more or less popular for users to rent bikes before and during COVID-19? How did ridership compare between 2019 and 2020?</p></li>
-<li><p><strong>Travel Patterns</strong>: Where are CitiBike riders going? What are common starting points and destinations? How long are typical CitiBike rides? Did travel patterns change between 2019 and 2020?</p></li>
+<li><p><strong>Descriptive Statistics</strong>: Who uses CitiBike? What are the age and sex distributions of users? How did ridership compare between 2019 and 2020? How does trip duration vary by age group and sex? By month?</p></li>
+<li><p><strong>Travel Patterns</strong>: What days of the week are more or less popular for users to rent bikes before and during COVID-19? Where are CitiBike riders going? What are common starting points and destinations? Did travel patterns change between 2019 and 2020?</p></li>
 <li><p><strong>Commuting Services</strong>: How did CitiBike ridership change, if at all, due to COVID-19? How has public transportation and CitiBike ridership together changed due to COVID-19?</p></li>
 </ol>
 </div>
@@ -408,7 +408,7 @@ div.tocify {
 <div id="citibike-data" class="section level3">
 <h3><strong>CitiBike Data</strong></h3>
 <p>CitiBike ridership data are readily available through a <a href="https://ride.citibikenyc.com/system-data">public website</a>. These data include CitiBike rides by month with descriptive information including: start and end stations, latitude and longitude of those stations, trip duration, and sex, birth year, and membership status of rider.</p>
-<p>The first challenge we encountered was the sheer volume of data – some months had nearly 250,000 rides across 24 csv files. We downloaded the 24 month-based ridership files, pulled the names of those files into a list, and then wrote and ran a function to read the csv files into R and conduct the following data cleaning steps:</p>
+<p>The first challenge we encountered was the sheer volume of data – some months had nearly 250,000 rides (observations). We downloaded the 24 month-based ridership files, pulled the names of those files into a list, and then wrote and ran a function to read the csv files into R and conduct the following data cleaning steps:</p>
 <pre class="r"><code>file_names &lt;- list.files(path = &quot;./data&quot;)
 manhattan_stations &lt;- read_csv(&quot;manhattan_stations.csv&quot;)
 
@@ -440,8 +440,8 @@ find_manhattan_rides &lt;- function(data_name) {
 
 manhattan_rides_df &lt;- map_df(file_names, find_manhattan_rides)</code></pre>
 <ul>
-<li>include only rides that <strong>start and end at stations in Manhattan</strong> (identified using a separate csv file, which listed all Manhattan states <code>manhattan_stations.csv</code>)</li>
-<li>keep rides that were <strong>at least 3 minutes in duration</strong></li>
+<li>include only rides that <strong>start and end at stations in Manhattan</strong> (identified using a separate csv file, which listed all Manhattan stations <code>manhattan_stations.csv</code>)</li>
+<li>keep rides that were <strong>at least 3 minutes in duration and didn’t start and end at the same station</strong></li>
 <li><strong>delete rides with missing or placeholder values</strong> for any variable (i.e., gender = 0),</li>
 <li>keep only rides completed by <strong>individuals who were 18-85 years old</strong> in the year of their ride, and</li>
 <li>take a <strong>random sample of 1% of rides from each month</strong> to ensure reasonable computing time.</li>
@@ -468,12 +468,12 @@ manhattan_rides_df &lt;- map_df(file_names, find_manhattan_rides)</code></pre>
 <li><code>start_date</code>: Date when the trip started, excluding year</li>
 <li><code>stop_date</code>: Date when the trip ended, excluding year</li>
 <li><code>year</code>: Year when trip took place</li>
-<li><code>age</code>: Age of rider during the ride subtracting birthyear from year of ride</li>
+<li><code>age</code>: Age of rider during the ride by subtracting birthyear from year of ride</li>
 <li><code>age_group</code>: Categorical variable identifying age group or rider (18-25, 26-35, 36-45, 46-55, 56-65, or 66-85)</li>
 </ul>
 <p>We then wrote this to a csv.</p>
 <pre class="r"><code>write_csv(manhattan_rides_df, &quot;manhattan_rides.csv&quot;)</code></pre>
-<p>Additionally, we pulled the [CitiBike Monthly Operating Reports] (<a href="https://ride.citibikenyc.com/system-data/operating-reports" class="uri">https://ride.citibikenyc.com/system-data/operating-reports</a>) and combined information on the number of each Membership type into a single dataset. This was used to show changes in CitiBike annual passes, single-day passes and single-trip passes from January 2019 through November 2021 (when we last pulled these reports).</p>
+<p>Additionally, we pulled the <a href="https://ride.citibikenyc.com/system-data/operating-reports">CitiBike Monthly Operating Reports</a> and combined information on the number of each Membership type into a single dataset. This was used to show changes in CitiBike annual passes, single-day passes and single-trip passes from January 2019 through November 2021 (when we last pulled these reports).</p>
 <pre class="r"><code>membership_df = 
   read_csv(&quot;ridership.csv&quot;) %&gt;%
   mutate(date = factor(date, ordered = TRUE, levels = c(&quot;01/2019&quot;, &quot;02/2019&quot;, &quot;03/2019&quot;, &quot;04/2019&quot;,
@@ -511,7 +511,7 @@ measures_of_interest =
 </div>
 <div id="turnstile-data" class="section level3">
 <h3>Turnstile data</h3>
-<p>Subway turnstiles data from <a href="https://data.ny.gov/Transportation/Turnstile-Usage-Data-2019/xfn5-qji9">2019</a> and <a href="https://data.ny.gov/Transportation/Turnstile-Usage-Data-2020/py8k-a8wg">2020</a> were downloaded. These datasets included information about the number of entries and exits from a given turnstile across all subway stations. We filtered to only Manhattan stations and converted latitude and longitude of stations to numeric variables, creating the <code>turnstiles_2019_data</code> and <code>turnstiles_2020_data</code> datsets. We then merged those datasets, resulting in the datafile called <code>shiny_data</code>. We created a new variable describing the percent change in ridership (exit and entry) per station from 2019 to 2020. This file was used to build our Subway Ridership Shiny App. This new data file contains 12 variables, some of which are listed below:</p>
+<p>Subway turnstiles data from <a href="https://data.ny.gov/Transportation/Turnstile-Usage-Data-2019/xfn5-qji9">2019</a> and <a href="https://data.ny.gov/Transportation/Turnstile-Usage-Data-2020/py8k-a8wg">2020</a> were downloaded. These datasets included information about the number of entries and exits from a given turnstile across all subway stations. We filtered to only Manhattan stations and converted latitude and longitude of stations to numeric variables, creating the <code>turnstiles_2019_data</code> and <code>turnstiles_2020_data</code> datasets. We then merged those datasets, resulting in the datafile called <code>shiny_data</code>. We created a new variable describing the percent change in ridership (exit and entry) per station from 2019 to 2020. This file was used to build our Subway Ridership Shiny App. This new data file contains 12 variables, some of which are listed below:</p>
 <pre class="r"><code>## Turnstile Data
 ### loading 2019 data
 turnstiles_data_2019 = read_csv(&quot;./data/2019-turnstile.csv&quot;) %&gt;% 
@@ -603,8 +603,8 @@ ridership_covid_pc_tidy =
 <h1>Exploratory Analysis</h1>
 <p>As outlined above, we had several categories of questions to explore and an even greater number of questions.</p>
 <div id="descriptive-statistics" class="section level3">
-<h3>Descriptive Statistics:</h3>
-<p><strong>Ridership by date</strong>: We started the exploratory analysis by confirming our hypotheses: Did ridership go down during the initial months of COVID-19 lockdown? This hypothesis was examined and confirmed.</p>
+<h3><a href="final_project.html">Descriptive Statistics</a>:</h3>
+<p><strong>CitiBike Rides Over the Year</strong>: We started the exploratory analysis by confirming a few of our hypotheses: Did ridership go down during the initial months of COVID-19 lockdown? Yes!</p>
 <pre class="r"><code>manhattan_rides_df %&gt;% 
   group_by(start_date, year) %&gt;% 
   summarize(obs = n()) %&gt;% 
@@ -612,7 +612,7 @@ ridership_covid_pc_tidy =
   geom_line() + 
   geom_smooth(se = FALSE) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, color = rep(c(&quot;black&quot;, rep(&quot;transparent&quot;, each = 10)), 365)))</code></pre>
-<p><strong>Average ride length by month</strong>: We then looked at trip duration by month, assuming that longer trips typically occur in warmed months and shorter trips take place during the cooler months. Upon initial examination of trip duration data, we found many outliers, namely trips of over 1,000,000 seconds. We assumed that these trips included people who did not properly dock the bikes at the end station, some who stole bikes or took them home for convenient use in the future, or similar situations. We filtered out these outliers using the IQR method and then examined trip duration using boxplots. We actually found that trip duration was relatively stable in 2019, but increased in March 2020. This is likely because as people were less comfortable using the subway during COVID, they turned to longer CitiBike rides.</p>
+<p><strong>Average Ride Length per Month</strong>: We then looked at trip duration by month, assuming that longer trips typically occur in warmed months and shorter trips take place during the cooler months. Upon initial examination of trip duration data, we found many outliers, namely trips of over 1,000,000 seconds. We assumed that these trips included people who did not properly dock the bikes at the end station, some who stole bikes or took them home for convenient use in the future, or similar situations. We filtered out these outliers using the IQR method and then examined trip duration using boxplots. We actually found that trip duration was relatively stable in 2019, but increased in March 2020. This is likely because as people were less comfortable using the subway during COVID, they turned to longer CitiBike rides.</p>
 <pre class="r"><code>monthly_Q1 &lt;- quantile(pull(manhattan_rides_df, trip_min), probs = 0.25)
 monthly_Q3 &lt;- quantile(pull(manhattan_rides_df, trip_min), probs = 0.75)
 monthly_inter_quart &lt;- IQR(pull(manhattan_rides_df, trip_min))
@@ -641,7 +641,7 @@ monthly_rides_df %&gt;%
     xaxis = list(title = &quot;Month&quot;),
     yaxis = list(title = &quot;Trip Duration in Minutes&quot;)
     )</code></pre>
-<p><strong>Number of rides per month</strong>: We also found that the number of rides dropped meaningfully when the stay-at-home orders were in place in New York in March and April. Folks didn’t use CitiBikes as much when there was nowhere they could go!</p>
+<p><strong>Number of Rides per Month</strong>: We also found that the number of rides dropped meaningfully when the stay-at-home orders were in place in New York in March and April. Folks didn’t use CitiBikes as much when there was nowhere they could go!</p>
 <pre class="r"><code>manhattan_rides_df %&gt;% 
   group_by(year) %&gt;% 
   mutate(
@@ -661,7 +661,7 @@ monthly_rides_df %&gt;%
     xaxis = list(title = &quot;Month&quot;),
     yaxis = list(title = &quot;Rides&quot;)
   )</code></pre>
-<p><strong>Trip duration by age and sex</strong>: Then, we examined demographic information such as age and sex by trip duration. Specifically, we generated boxplots of trip duration in minutes by gender and age group. Then, we plotted the average age of riders per month by gender.</p>
+<p><strong>Trip duration by Age and Sex</strong>: Then, we examined demographic information such as age and sex by trip duration. Specifically, we generated boxplots of trip duration in minutes by gender and age group.</p>
 <pre class="r"><code>#this generates a plot of boxplots of trip duration (minutes) by gender and age_group
 trip_dur_age_gender_df %&gt;% 
   mutate(
@@ -674,7 +674,7 @@ trip_dur_age_gender_df %&gt;%
     yaxis = list(title = &quot;Trip Duration (min)&quot;), 
     legend = list(title = list(text = &quot;&lt;b&gt; Gender &lt;/b&gt;&quot;))
   )</code></pre>
-<p><strong>Average age per day by gender</strong>: We also looked at the average age per day by gender. Generally, male riders tended to be older throughout the year.</p>
+<p><strong>Average Age of CitiBike Riders by Sex</strong>: We also looked at the average age per day by gender. Generally, male riders tended to be older throughout the year.</p>
 <pre class="r"><code># this dataframe groups rides by gender and month
 # and provides the average age for each gender in that month
 # along with the standard deviation, standard error, lower bound, and upper bound
@@ -716,10 +716,10 @@ ggplotly(avg_age_plot) %&gt;%
   )</code></pre>
 </div>
 <div id="travel-patterns" class="section level3">
-<h3>Travel Patterns</h3>
+<h3><a href="travel_patterns.html">Travel Patterns</a></h3>
 <p>Next, we looked at how travel patterns changed during the pandemic.</p>
-<p><strong>Rides per day of week</strong>: In 2019, we would assume that many rides occured during the week - going to and from the office. Our hypothesis was that the number of rides per day was higher in 2019 during the week than in 2020. It was true! Interestingly, there were slightly more rides on the weekends in 2020, likely because of a predisposition to use biking as a mode of transportation, rather than subways, during COVID-19.</p>
-<p><strong>Monthly destinations in 2019 vs. 2020</strong>: We then examined ending stations across Manhatann in 2019 vs. 2020. We found that CitiBike opened more stations in Northern Manhattan in 2020, leading to an increase in rides uptown. Finally, we see that 2020 started off with more rides, but then we see that ridership plummets in March before recovering slightly.</p>
+<p><strong>Rides by Day of Week</strong>: In 2019, we would assume that many rides ocurred during the week - going to and from the office. Our hypothesis was that the number of rides per day was higher in 2019 during the week than in 2020. It was true! Interestingly, there were slightly more rides on the weekends in 2020, likely because of a predisposition to use biking as a mode of transportation, rather than subways, during COVID-19.</p>
+<p><strong>Monthly Destinations in 2019 vs. 2020</strong>: We then examined ending stations across Manhatann in 2019 vs. 2020. We noticed that CitiBike opened more stations in Northern Manhattan in 2020, leading to an increase in rides uptown. Finally, we see that 2020 started off with more rides, but then we see that ridership plummets in March before recovering slightly.</p>
 <pre class="r"><code>nyc = 
   as_tibble(
     map_data(&quot;state&quot;)
@@ -796,7 +796,7 @@ for (i in 2:12) {
 }
 
 new_month_gif</code></pre>
-<p><strong>Daily destinations in 2019 and 2020 in lower Manhattan</strong>: We then wanted to examine destinations specifically in lower Manhattan near hospitals. An interesting finding was that even when ridership drops in 2020, we see that common destinations continue to be near hospitals and other healthcare hubs.</p>
+<p><strong>Daily Destinations in 2019 and 2020 in Lower Manhattan</strong>: We then wanted to examine destinations specifically in Lower Manhattan near hospitals. An interesting finding was that even when ridership drops in 2020, we see that common destinations continue to be near hospitals and other healthcare hubs.</p>
 <pre class="r"><code>bikes_2019 = manhattan_rides_df %&gt;% 
   filter(year == &quot;2019&quot;) %&gt;% 
     group_by(stop_date, end_station_longitude, end_station_latitude) %&gt;% 
@@ -877,13 +877,13 @@ for (i in 2:60) {
 }
 
 new_daily_gif</code></pre>
-<p><strong>Common Rides to Manhattan Locations</strong>: We were interested in common travel patterns around Manhattan from 2019-2020. To do this, we selected 16 locations from around Manhattan and found the nearest Citi Bike station to that location. Then, we summarized the data to find the number of trips that start at one station and then end at the stations closest to the Manhattan locations. Next, we filtered the data to show only the most common trip that end at each of the 16 Citi Bike stations for our 16 locations (in the event of a tie, we select the start station that’s furthest away from the end station of interest). Then, we also determined the average age of a rider ending their trips at those 16 destinations.</p>
-<p>We created a shiny app to visualize the journeys to various Manhattan locations, which you can view [here] (<a href="https://mtr2143.shinyapps.io/shiny_end_stations/" class="uri">https://mtr2143.shinyapps.io/shiny_end_stations/</a>). Please look at our <a href="travel_patterns.html">Travel Patterns</a> page to learn how to interact with our shiny app.</p>
+<p><strong>Common Rides to Manhattan Locations</strong>: We were also interested in common travel patterns around Manhattan from 2019-2020. To examine this, we selected 16 locations from around Manhattan and found the nearest CitiBike station to that location. Then, we summarized the data to find the number of trips that start at one station and then end at the stations closest to the Manhattan locations. Next, we filtered the data to show only the most common trip that end at each of the 16 CitiBike stations for our 16 locations (in the event of a tie, we select the start station that’s furthest away from the end station of interest). Then, we also determined the average age of a rider ending their trips at those 16 destinations.</p>
+<p>We created a shiny app to visualize the journeys to various Manhattan locations, which you can view <a href="https://mtr2143.shinyapps.io/shiny_end_stations/">here</a>. Please look at our <a href="travel_patterns.html">Travel Patterns</a> page to learn how to interact with our shiny app.</p>
 </div>
 <div id="commuting-services" class="section level3">
-<h3>Commuting Services</h3>
+<h3><a href="commuting_services.html">Commuting Services</a></h3>
 <p>In this part of our analysis, we wanted to examine CitiBike usage by itself and relative to other commuting services (i.e., MTA).</p>
-<p><strong>CitiBike Memberships Purchased by Month in NYC and New Jersey City</strong>: This animated graph demonstrates the growth of single day passes in the summer of 2020 and 2021 relative 2019.</p>
+<p><strong>CitiBike Memberships Purchased by Month in NYC and New Jersey City</strong>: This animated graph demonstrates the growth of single day passes in the summer of 2020 and 2021 relative 2019. As expected, New Yorkers (and tourists!) are eager to use CitiBike during warmer months.</p>
 <pre class="r"><code>measures_of_interest %&gt;%
   ggplot(aes(x = date, y = count)) +
   geom_line(aes(group = measure, color = measure)) +
@@ -902,7 +902,7 @@ new_daily_gif</code></pre>
   theme(legend.position = &quot;bottom&quot;) +
   guides(color = guide_legend(nrow = 2, byrow = TRUE)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))</code></pre>
-<p><strong>Ridership Transit System Percent Change Following COVID</strong>: We then wanted to examine how ridership of all commuting services changed from 2019 compared to 2020. We found that every transit service experienced a drop in ridership in March 2020 compared to 2019 levels, coinciding with the start of lockdown. However, CitiBike usage recovered and in many cases exceeded its 2019 levels, while all other forms of transit stayed below the usage levels seen in 2019.</p>
+<p><strong>Ridership Transit System Percent Change Following COVID</strong>: We then wanted to examine how ridership of all commuting services changed from 2019 compared to 2020. We found that every transit service experienced a drop in ridership in March 2020 compared to 2019 levels, coinciding with the start of lockdown. However, CitiBike usage recovered and in many cases exceeded its 2019 levels, while other forms of transit stayed below the usage levels seen in 2019.</p>
 <pre class="r"><code>renamed_ridership = 
   ridership_pc_change %&gt;%
     mutate(transit_system = factor(transit_system, levels = c(&quot;access_a_ride&quot;, &quot;bridges_and_tunnels&quot;,
@@ -939,10 +939,11 @@ renamed_ridership %&gt;%
 </div>
 <div id="discussion" class="section level1">
 <h1>Discussion</h1>
-<p>The goal of this project was to examine how usage of Citi Bikes and overall NYC transit changed as a result of the COVID-19 pandemic. Our work shows that there were more rides in 2019 compared to the early months of the pandemic in 2020. There was a dip in ridership in March of 2020 when cases first started arising in NYC. On average, trip durations were longer throughout 2020 than in 2019. The longest rides occurred between March 2020 and August 2020. This is not surprising given that during this time, many people were avoiding using the MTA as a mode of transportation to avoid close contact with others. In March 2020, there was a major spike in all forms of Citi Bike memberships from April 2020 through August 2020 and this spike was most significant for single-trip purchases. Another even more significant spike occurred from May 2021 through August 2021. We see these same patterns displayed when examining our animated maps looking at month to month ridership when comparing 2019 to 2020. Interestingly in August of 2020, Citi Bike expanded the number of stops they have in northern Manhattan. Clearly these new stations were very popular among riders in that area. We created a Shiny App to allow the user to explore common ride journeys through various locations in Manhattan. Destinations include Columbia University and the Met.</p>
-<p>We also found interesting patterns of Citi Bike ridership by age and gender. Across all time points from 2019 to 2020, the average age of riders was higher in males than in females. Not surprisingly, younger riders have on average longer trip durations than older riders.</p>
-<p>In addition, we examined how ridership changed starting at the beginning of the pandemic for Citi Bike as well as other NYC transit systems including the Subway, Metro North, and Buses. From this graph, we can see that every transit service experienced a drop in ridership in March 2020 when compared to 2019 levels, which coincides with the start of lockdown. However eventually, Citi Bike usage recovered and, in many cases, exceeded its 2019 levels, while all other forms of transit stayed below the usage levels seen in 2019. This finding was not surprising. We also created a shiny app to allow the user to see daily percent change of Subway Ridership data comparing 2019 to 2020. We can see that in March ridership went down by nearly 100% and remained low for the rest of the year.</p>
-<p>Overall, our project demonstrates that all forms of transportation across NYC fell in their usage when the Covid-19 pandemic first hit the city. It also shows that at times when public transportation usage was down, Citi Bike usage went up. Despite the difficulties that the pandemic has brought to the city, Citi Bike experienced an increase in ridership and an expansion of stations.</p>
+<p>The goal of this project was to examine how usage of CitiBikes and overall NYC transit changed as a result of the COVID-19 pandemic. Our work shows that there were more rides in 2019 compared to the early months of the pandemic in 2020. There was a dip in ridership in March of 2020 when cases first started arising in NYC. On average, trip durations were longer throughout 2020 than in 2019. The longest rides occurred between March 2020 and August 2020. This is not surprising given that during this time, many people were avoiding using the MTA as a mode of transportation to avoid close contact with others. There was a major spike in all forms of CitiBike memberships from April 2020 through August 2020, and this spike was most significant for single-trip purchases. Another even more significant spike occurred from May 2021 through August 2021.</p>
+<p>We see these same patterns displayed when examining our animated maps looking at month to month ridership when comparing 2019 to 2020. Interestingly in August of 2020, CitiBike expanded the number of stops they have in Northern Manhattan. Clearly these new stations were very popular among riders in that area. We created a Shiny App to allow the user to explore common journeys through various locations in Manhattan. Destinations include Columbia University and the Met.</p>
+<p>We also found interesting patterns of Citi Bike ridership by age and gender. Across all time points from 2019 to 2020, the average age of riders was higher in males than in females. Not surprisingly, younger riders have, on average, longer trip durations than older riders.</p>
+<p>In addition, we examined how ridership changed starting at the beginning of the pandemic for CitiBike as well as other NYC transit systems, including the Subway, Metro North, and Buses. From this graph, we can see that every transit service experienced a drop in ridership in March 2020 when compared to 2019 levels, which coincides with the start of lockdown. However, eventually, CitiBike usage recovered and, in many cases, exceeded its 2019 levels, while other forms of transit stayed below the usage levels seen in 2019. This finding was not surprising. We also created a shiny app to allow the user to see daily percent change of Subway Ridership data comparing 2019 to 2020. We can see that in March ridership went down by nearly 100% and remained low for the rest of the year.</p>
+<p>Overall, our project demonstrates that all forms of transportation across NYC fell in their usage when the Covid-19 pandemic first hit the city. It also shows that at times when public transportation usage was down, CitiBike usage went up. Despite the difficulties that the pandemic has brought to the city, CitiBike experienced an increase in ridership and an expansion of stations.</p>
 </div>
 
 
