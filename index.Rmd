@@ -15,7 +15,7 @@ library(timevis)
 
 <center>
 
-![](1280px-Citi_Bike_logo.svg.png)
+![](1280px-Citi_Bike_logo Small.jpeg)
 
 </center>
 
