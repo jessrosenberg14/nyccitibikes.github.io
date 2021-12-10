@@ -54,7 +54,7 @@ manhattan_rides_df <-
   )
 ```
 
-## Rides by day of week 
+## Rides by Day of Week 
 
 ```{r, Rides by day of week}
 manhattan_rides_df %>% 
@@ -68,9 +68,9 @@ manhattan_rides_df %>%
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-The number of rides per day was higher in 2019 during the week than in 2020, likely due to the shift to working from home in 2020. Interestingly, there were slightly more rides on the weekends in 2020, likely because of a predisposition to use biking as a mode of transportation, rather than subways, during COVID-19. 
+The number of rides per day was higher in 2019 during the week than in 2020, likely due to the shift to working from home in 2020. Interestingly, there were slightly more rides on the weekends in 2020, likely because of a predisposition to use biking as a mode of transportation, rather than subways, during COVID-19 due to avoidance of crowds. 
 
-## Monthly destinations in 2019 vs. 2020 
+## Monthly Destinations in 2019 vs. 2020 
 
 ```{r, read in hubs and hospital data}
 hubs_df = 
@@ -82,7 +82,7 @@ hospitals_df =
   drop_na()
 ```
 
-Following is a side by side comparison of monthly rides in 2019 and 2020. Hospitals are marked with red dots and financial hubs are marked with green dots. 
+The following is a side by side comparison of monthly rides in 2019 and 2020. Hospitals are marked with red dots and financial hubs are marked with green dots. 
 
 ```{r, rides in 2019 vs 2020 by month}
 nyc = 
@@ -165,7 +165,7 @@ new_month_gif
 
 In mid-2020, Citi Bike expanded stops into northern Manhattan, driving the expansion of the bubble graph area seen in late-2020. We can see that 2020 started off with more rides than 2019, but then decreased significantly in March. Ridership numbers recovered a bit later in the year, but not quite to 2019 levels. 
 
-## Daily destinations in 2019 and 2020 in lower Manhattan 
+## Daily Destinations in 2019 and 2020 in Lower Manhattan 
 
 ```{r, zoomed daily map}
 bikes_2019 = manhattan_rides_df %>% 
@@ -250,9 +250,11 @@ for (i in 2:60) {
 new_daily_gif
 ```
 
-This graph displays the daily ridership in 2019 vs 2020 for lower Manhattan. Even more than in the monthly graph above, this makes apparent how drastically the usage of Citi Bike dropped in late-March 2020 compared to 2019. The areas of the city that were still utilized during this drop tended to be near either financial hubs or hospitals, marked with green or red dots respectively.
+This graph displays the daily ridership in 2019 vs 2020 for Lower Manhattan. Even more than in the monthly graph above, this makes apparent how drastically the usage of CitiBikes dropped in late-March 2020 compared to 2019. The areas of the city that were still utilized during this drop tended to be near either financial hubs or hospitals, marked with green or red dots respectively.
 
 ## Shiny App: Common Rides to Manhattan Locations:
+
+We were also interested in common travel patterns around Manhattan from 2019-2020. To examine this, we selected 16 locations from around Manhattan and found the nearest CitiBike station to that location. Then, we summarized the data to find the number of trips that start at one station and then end at the stations closest to the Manhattan locations. Next, we filtered the data to show only the most common trip that end at each of the 16 CitiBike stations for our 16 locations (in the event of a tie, we select the start station that’s furthest away from the end station of interest). Then, we also determined the average age of a rider ending their trips at those 16 destinations.
 
 We created a shiny app to visualize the journeys to various Manhattan locations, which you can view [here](https://mtr2143.shinyapps.io/shiny_end_stations/). 
 
@@ -470,11 +472,11 @@ shinyApp(ui = ui, server = server)
 
 To interact with this app:
 
- 1. Select a Manhattan location and watch how both the map and plot below it change. 
+ 1. Select a Manhattan location, and watch how both the map and plot below it change. 
 
-2. The red icon represents the bike station closest to the Manhattan destination you selected
+2. The red icon represents the bike station closest to the Manhattan destination you selected. 
 
-3. The green icon represents the bike station where most trips ending at the station near your destination begin
+3. The green icon represents the bike station where most trips ending at the station near your destination begin. 
 
 4. The building icon represents the destination you selected. 
 
@@ -483,4 +485,3 @@ To interact with this app:
 6. Note how the average age of riders compared to the selected destination changes in the lollipop plot under the map. 
 
 7. These paths between stations are just there to give you an idea of the distance between stations and relative to the destination. They are not recommended paths (*please* - don't try to ride through the Central Park reservoir)
-

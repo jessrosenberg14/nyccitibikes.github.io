@@ -47,7 +47,7 @@ manhattan_rides_df %>%
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-Overall and as expected, there were more CitiBike rides in 2019 beginning in the peak months of the pandemic in 2020. 
+Overall and as expected, there were more CitiBike rides in 2019 during the equivalent month during the peak of the pandemic in 2020. 
 
 ## Average Ride Length per Month
 
@@ -82,7 +82,7 @@ monthly_rides_df %>%
     )
 ```
 
-Looks like maybe the overall length of trips in 2019 was more consistent. 2020 had a bump in duration of rides, starting in April. Overall, trip length seems more variable in 2020.
+It appears that the overall length of trips in 2019 was more consistent. 2020 had a bump in duration of rides, starting in April. Overall, trip length seems more variable in 2020.
 
 ## Number of Rides per Month 
 
@@ -108,7 +108,7 @@ manhattan_rides_df %>%
   )
 ```
 
-Huge drop in monthly trips in April 2020. Lockdown started mid/late March so this coincides with people transitioning to WFH and largely staying inside to minimize contacts. The ride numbers bounce back quite a bit after this but not to 2019 levels.
+There is a huge drop in monthly trips in April 2020. Lockdown started mid/late March so this coincides with people transitioning to WFH and largely staying inside to minimize contacts. The ride numbers bounce back quite a bit after this, but not to 2019 levels.
 
 ```{r, subset of manhattan rides data}
 # the code below saves trip_min, gender, age_group variables of manhattan_rides_df
@@ -134,7 +134,7 @@ trip_dur_age_gender_df <-
     )
 ```
 
-## Average Trip Duration
+## Trip Duration by Age and Sex
 
 ```{r, trip_min by age_group and gender}
 #this generates a plot of boxplots of trip duration (minutes) by gender and age_group
@@ -152,7 +152,9 @@ trip_dur_age_gender_df %>%
   )
 ```
 
-We can see by comparing averages, females take longer rides than males across all age groups. Interestingly though there are more outliers for trip duration among males than females. On average younger riders take longer rides compared to older riders. Rides never surpassed 35 minutes. This makes sense because Citi Bike members get charged extra fees for trips over 40 mins. 
+We can see by comparing averages, females take longer rides than males across all age groups. Interestingly though there are more outliers for trip duration among males than females. On average younger riders take longer rides compared to older riders.  
+
+## Average Age of CitiBike Riders by Sex
 
 ```{r, average age per day by gender}
 # this dataframe groups rides by gender and month

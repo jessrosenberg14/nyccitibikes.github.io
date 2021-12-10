@@ -73,8 +73,7 @@ measures_of_interest %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
-This animated graph displays changes in CitiBike annual passes, single-day passes and single-trip passes from January 2019 through November 2021 (when we last pulled these reports). As seen by this graph, spikes in memberhsip tend to occur in summer months. During the COVID-19 pandemic, there was a major spike in all forms
-of CitiBike memberships from April 2020 through August 2020 and this spike was most significant for single-trip purchases. Another even more significant spike occurred from May 2021 through August 2021. 
+This animated graph displays changes in CitiBike annual passes, single-day passes, and single-trip passes from January 2019 through November 2021 (when we last pulled these reports). As seen by this graph, spikes in membership tend to occur in summer months. During the COVID-19 pandemic, there was a major spike in all forms of CitiBike memberships from April 2020 through August 2020, and this spike was most significant for single-trip purchases. Another even more significant spike occurred from May 2021 through August 2021. 
 
 ## Ridership Transit System Percent Change Following COVID
 
@@ -196,7 +195,9 @@ renamed_ridership %>%
 
 This plot shows the percent change in ridership in 2020 compared to 2019 for various transit services across NYC. By this graph we can see that every transit service experienced a drop in ridership in March 2020 compared to 2019 levels, coinciding with the start of lockdown. However, Citi Bike usage recovered and in many cases exceeded its 2019 levels, while all other forms of transit stayed below the usage levels seen in 2019.
 
-## Shiny App: Subway Ridership Percent Change from 2019 to 2020
+## Shiny App: Subway Ridership Percent Change from 2019 to 2020:
+
+We wanted to examine how subway ridership changed across locations between 2019 and 2020. Specifically, we looked at entry and exit data from Subway turnstiles to understand where people are going to and coming from throughout the year.
 
 We created a shiny app to visualize subway ridership change from 2019 to 2020, which you can view [here](https://zoeverzani.shinyapps.io/subway_ridership/).
 
@@ -327,19 +328,14 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-
-This Shiny App shows how subway ridership changed from 2019 to 2020 in any of the NYC boroughs. We looked at entry and exit data, specifically. 
-
 To interact with this app:
 
- 1. Select a Date you would like to plot looking at how Subway Ridership changes over 2019 to 2020.
+ 1. Select a Date you would like to plot to examine how Subway Ridership changed over 2019 to 2020.
 
-2. Select the NYC Boroughs you would like to see data on. By default, Manhattan is clicked. You can click on as many Boroughs as you would like to see. 
+2. Select the NYC Boroughs you would like to examine. By default, Manhattan is selected. You can click on as many Boroughs as you would like to see. 
 
 3. Select what type of Turnstile Data you would like to visualize. Exit data represents riders leaving the subway stations while Entry data represents riders entering the subway station. You can only plot Exit or Entry data but not both. 
 
 5. Once the map loads you can zoom in and out as well as move the map around. 
 
 6. The legend shows percent change for each subway stop comparing turnstile data from 2020 to 2019. Darker colors (purple) show a decrease in ridership while lighter colors (yellow) represent an increase in ridership.
-
-

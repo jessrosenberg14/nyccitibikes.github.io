@@ -13,6 +13,12 @@ library(tidyverse)
 library(timevis)
 ```
 
+<center>
+
+![](1280px-Citi_Bike_logo.svg.png)
+
+</center>
+
 ## Group members 
 * Jess Rosenberg (jdr2191)
 * Zoe Verzani (zv2138)
@@ -21,13 +27,15 @@ library(timevis)
 * Christie Zettler (cz2657)
 
 ## The motivation for this project
-During the height of the pandemic, Citi Bikes played an integral part in helping to transport critical workers around NYC. Many people in NYC also likely switched from riding the subway regularly to seeking alternative transportation methods. We are interested in understanding how transportation trends across NYC changed during the pandemic and since vaccinations became widely available in early 2021. 
+During the height of the COVID-19 pandemic, CitiBikes played an integral role in helping to transport critical workers around NYC, and many New Yorkers switched from riding the subway regularly to seeking alternative transportation methods. We are interested in understanding how transportation trends (both CitiBike and MTA) changed across NYC due to the pandemic. 
 
 ![](ezgif.com-gif-maker.gif)
 
+
+
 ## Timeline of COVID Events
 
-Our understanding of COVID-19 changed daily, if not hourly, at the beginning of the pandemic. The below timeline is helpful to remind ourselves of major events of 2020. 
+In the early days of the pandemic, our understanding of COVID-19 changed daily, if not hourly. The below timeline is a helpful reminder of major events of 2020. 
 
 ```{r}
 timeline <- data.frame(
@@ -67,6 +75,3 @@ timevis(
   width = "110%"
   )
 ```
-
-
-
